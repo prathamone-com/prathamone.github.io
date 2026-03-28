@@ -1,0 +1,60 @@
+/*
+ * ==========================================================
+ * AITDL AI AGENT BUILD SIGNATURE
+ * ==========================================================
+ * Architect    : Jawahar R Mallah
+ * Designation  : AI Systems Architect & Author
+ * Organization : AITDL Network | PrathamOne
+ * Framework    : Autonomous AI Agent Development
+ * Authored By  : Jawahar R Mallah
+ * Version      : 1.0.0
+ * Release Date : 28 March 2026
+ * Environment  : Production
+ *
+ * Signature    : Engineered by Jawahar R Mallah
+ * Motto        : Crafted with Logic, Vision & AI
+ * ==========================================================
+ */
+
+@import "tailwindcss";
+
+@theme {
+  /* Premium PrathamOne Palette */
+  --color-brand-primary: #1e3a8a; /* Deep Navy */
+  --color-brand-secondary: #f97316; /* Saffron Accent */
+  --color-brand-success: #059669; /* Indian Emerald */
+  --color-brand-background: #fdfdfb; /* Ivory White */
+  
+  --color-border: var(--color-gray-200);
+  --color-input: var(--color-gray-200);
+  --color-ring: var(--color-brand-primary);
+  --color-foreground: var(--color-gray-950);
+  
+  --radius-lg: 1rem;
+  --radius-md: 0.75rem;
+  --radius-sm: 0.5rem;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-brand-background text-foreground font-sans antialiased;
+    background-image: radial-gradient(circle at 50% 50%, rgba(30, 58, 138, 0.02) 0%, transparent 100%);
+  }
+}
+
+@layer components {
+  .pratham-card {
+    @apply bg-white border border-gray-100 rounded-lg shadow-sm hover:shadow-md transition-all duration-300;
+  }
+  
+  .btn-primary {
+    @apply bg-brand-primary text-white px-4 py-2 rounded-md font-medium hover:opacity-90 transition-all flex items-center justify-center gap-2;
+  }
+  
+  .btn-secondary {
+    @apply border-2 border-brand-primary text-brand-primary px-4 py-2 rounded-md font-medium hover:bg-brand-primary hover:text-white transition-all flex items-center justify-center gap-2;
+  }
+}

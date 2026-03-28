@@ -1,0 +1,45 @@
+/**
+ * ==========================================================
+ * AITDL AI AGENT BUILD SIGNATURE
+ * ==========================================================
+ * Architect    : Jawahar R Mallah
+ * Designation  : AI Systems Architect & Author
+ * Organization : AITDL Network | PrathamOne
+ * Framework    : Autonomous AI Agent Development
+ * Authored By  : Jawahar R Mallah
+ * Version      : 1.0.0
+ * Release Date : 28 March 2026
+ * Environment  : Production
+ *
+ * Signature    : Engineered by Jawahar R Mallah
+ * Motto        : Crafted with Logic, Vision & AI
+ * ==========================================================
+ */
+import { type NextRequest, NextResponse } from 'next/server'
+import { updateSession } from '@prathamone/db/middleware'
+
+export async function middleware(request: NextRequest) {
+  const isDemoMode = request.cookies.get('pratham_demo_mode')?.value === 'true';
+  const { pathname } = request.nextUrl;
+
+  // Bypass auth for demo-mode in portal routes
+  if (isDemoMode && (pathname.startsWith('/parent') || pathname.startsWith('/student'))) {
+    return NextResponse.next();
+  }
+
+  return await updateSession(request)
+}
+
+export const config = {
+  matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     * Feel free to modify this pattern to include more paths.
+     */
+    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+  ],
+}
+

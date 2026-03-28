@@ -1,0 +1,204 @@
+{
+  "board": {
+    "id": "board_maha",
+    "name": "Maharashtra State Board",
+    "short_name": "MSBSHSE",
+    "language_options": ["English", "Marathi", "Hindi"]
+  },
+  "class": {
+    "id": "class_12",
+    "board_id": "board_maha",
+    "name": "Class 12",
+    "stream": "Science"
+  },
+  "subject": {
+    "id": "sub_math12",
+    "class_id": "class_12",
+    "name": "Mathematics",
+    "code": "MATH12"
+  },
+  "curriculum": [
+    {
+      "id": "chap_mathlogic",
+      "chapter_no": 1,
+      "title": "Mathematical Logic",
+      "book_reference": "https://books.ebalbharati.in/pdfs/1203030418.pdf",
+      "topics": [
+        { "id": "t_logic_statement", "title": "Statement and its truth value", "difficulty": "Easy" },
+        { "id": "t_logic_connectives", "title": "Logical connectives, compound statements", "difficulty": "Easy" },
+        { "id": "t_logic_truth_tables", "title": "Truth tables", "difficulty": "Medium" },
+        { "id": "t_logic_quantifiers", "title": "Quantifiers and quantified statements", "difficulty": "Medium" },
+        { "id": "t_logic_conditional", "title": "Conditional and Biconditional statements", "difficulty": "Medium" },
+        { "id": "t_logic_applications", "title": "Application of logic to switching circuits", "difficulty": "Hard" }
+      ]
+    },
+    {
+      "id": "chap_matrices",
+      "chapter_no": 2,
+      "title": "Matrices",
+      "book_reference": "https://books.ebalbharati.in/pdfs/1203030418.pdf",
+      "topics": [
+        { "id": "t_mat_basics", "title": "Types of matrices and algebra of matrices", "difficulty": "Easy" },
+        { "id": "t_mat_transform", "title": "Elementary transformation", "difficulty": "Medium" },
+        { "id": "t_mat_inverse", "title": "Inverse of a matrix (adjoint and elementary methods)", "difficulty": "Hard" },
+        { "id": "t_mat_linear_eq", "title": "Application of matrices to solve system of linear equations", "difficulty": "Hard" }
+      ]
+    },
+    {
+      "id": "chap_trig_functions",
+      "chapter_no": 3,
+      "title": "Trigonometric Functions",
+      "book_reference": "https://books.ebalbharati.in/pdfs/1203030418.pdf",
+      "topics": [
+        { "id": "t_trig_eq", "title": "Trigonometric equations and their solutions", "difficulty": "Medium" },
+        { "id": "t_trig_triangle", "title": "Solutions of triangle (sine, cosine and projection rules)", "difficulty": "Medium" },
+        { "id": "t_trig_inverse", "title": "Inverse trigonometric functions and their properties", "difficulty": "Hard" }
+      ]
+    },
+    {
+      "id": "chap_straight_lines",
+      "chapter_no": 4,
+      "title": "Pair of Straight Lines",
+      "book_reference": "https://books.ebalbharati.in/pdfs/1203030418.pdf",
+      "topics": [
+        { "id": "t_line_combined_eq", "title": "Combined equation of a pair of straight lines", "difficulty": "Medium" },
+        { "id": "t_line_homogeneous_eq", "title": "Homogeneous equation of degree two in x and y", "difficulty": "Hard" },
+        { "id": "t_line_angle", "title": "Angle between lines represented by homogeneous equation", "difficulty": "Medium" },
+        { "id": "t_line_general_eq", "title": "General second degree equation in x and y", "difficulty": "Hard" }
+      ]
+    },
+    {
+      "id": "chap_vectors",
+      "chapter_no": 5,
+      "title": "Vectors",
+      "book_reference": "https://books.ebalbharati.in/pdfs/1203030418.pdf",
+      "topics": [
+        { "id": "t_vec_algebra", "title": "Vectors and their algebra", "difficulty": "Easy" },
+        { "id": "t_vec_section", "title": "Section formula", "difficulty": "Medium" },
+        { "id": "t_vec_scalar_product", "title": "Scalar/Dot product of two vectors", "difficulty": "Medium" },
+        { "id": "t_vec_vector_product", "title": "Vector/Cross product of two vectors", "difficulty": "Medium" },
+        { "id": "t_vec_scalar_triple", "title": "Scalar triple product and its applications", "difficulty": "Hard" }
+      ]
+    },
+    {
+      "id": "chap_line_plane",
+      "chapter_no": 6,
+      "title": "Line and Plane",
+      "book_reference": "https://books.ebalbharati.in/pdfs/1203030418.pdf",
+      "topics": [
+        { "id": "t_lp_line_eq", "title": "Vector and Cartesian equations of a line", "difficulty": "Medium" },
+        { "id": "t_lp_distance_point_line", "title": "Distance of a point from a line", "difficulty": "Medium" },
+        { "id": "t_lp_skew_lines", "title": "Skew lines and shortest distance", "difficulty": "Hard" },
+        { "id": "t_lp_plane_eq", "title": "Equation of a plane passing through a point", "difficulty": "Medium" },
+        { "id": "t_lp_plane_angle", "title": "Angle between planes, line and plane", "difficulty": "Hard" },
+        { "id": "t_lp_distance_point_plane", "title": "Coplanarity of two lines and Distance of a point from a plane", "difficulty": "Hard" }
+      ]
+    },
+    {
+      "id": "chap_linear_prog",
+      "chapter_no": 7,
+      "title": "Linear Programming",
+      "book_reference": "https://books.ebalbharati.in/pdfs/1203030418.pdf",
+      "topics": [
+        { "id": "t_lpp_intro", "title": "Introduction and mathematical formulation of LPP", "difficulty": "Easy" },
+        { "id": "t_lpp_graphical", "title": "Graphical method of solving LPP", "difficulty": "Medium" }
+      ]
+    },
+    {
+      "id": "chap_differentiation",
+      "chapter_no": 8,
+      "title": "Differentiation",
+      "book_reference": "https://books.ebalbharati.in/pdfs/1203030318.pdf",
+      "topics": [
+        { "id": "t_diff_composite", "title": "Derivatives of Composite functions (Chain Rule)", "difficulty": "Medium" },
+        { "id": "t_diff_inverse", "title": "Derivatives of Inverse functions", "difficulty": "Medium" },
+        { "id": "t_diff_logarithmic", "title": "Logarithmic Differentiation", "difficulty": "Hard" },
+        { "id": "t_diff_parametric", "title": "Derivatives of Parametric functions", "difficulty": "Hard" },
+        { "id": "t_diff_higher_order", "title": "Higher order derivatives", "difficulty": "Medium" }
+      ]
+    },
+    {
+      "id": "chap_app_derivatives",
+      "chapter_no": 9,
+      "title": "Applications of Derivatives",
+      "book_reference": "https://books.ebalbharati.in/pdfs/1203030318.pdf",
+      "topics": [
+        { "id": "t_ad_geometry", "title": "Equations of Tangent and Normal", "difficulty": "Medium" },
+        { "id": "t_ad_rate_measure", "title": "Derivative as a Rate Measure", "difficulty": "Medium" },
+        { "id": "t_ad_approx", "title": "Approximations", "difficulty": "Medium" },
+        { "id": "t_ad_rolle_lmv", "title": "Rolle's theorem and LMVT", "difficulty": "Hard" },
+        { "id": "t_ad_increasing_decreasing", "title": "Increasing and decreasing functions", "difficulty": "Medium" },
+        { "id": "t_ad_maxima_minima", "title": "Maxima and Minima", "difficulty": "Hard" }
+      ]
+    },
+    {
+      "id": "chap_integration_indef",
+      "chapter_no": 10,
+      "title": "Indefinite Integration",
+      "book_reference": "https://books.ebalbharati.in/pdfs/1203030318.pdf",
+      "topics": [
+        { "id": "t_int_basics", "title": "Standard Integrals", "difficulty": "Easy" },
+        { "id": "t_int_substitution", "title": "Methods of Integration - Substitution", "difficulty": "Medium" },
+        { "id": "t_int_parts", "title": "Integration by parts", "difficulty": "Hard" },
+        { "id": "t_int_partial_fractions", "title": "Integration by partial fractions", "difficulty": "Hard" }
+      ]
+    },
+    {
+      "id": "chap_integration_def",
+      "chapter_no": 11,
+      "title": "Definite Integration",
+      "book_reference": "https://books.ebalbharati.in/pdfs/1203030318.pdf",
+      "topics": [
+        { "id": "t_defint_limit_sum", "title": "Definite integral as limit of a sum", "difficulty": "Hard" },
+        { "id": "t_defint_fundamental_theorem", "title": "Fundamental Theorem of Integral Calculus", "difficulty": "Medium" },
+        { "id": "t_defint_properties", "title": "Properties of definite integral", "difficulty": "Hard" }
+      ]
+    },
+    {
+      "id": "chap_app_defint",
+      "chapter_no": 12,
+      "title": "Application of Definite Integration",
+      "book_reference": "https://books.ebalbharati.in/pdfs/1203030318.pdf",
+      "topics": [
+        { "id": "t_adi_area", "title": "Area under a curve", "difficulty": "Medium" },
+        { "id": "t_adi_area_two_curves", "title": "Area bounded by two curves", "difficulty": "Hard" }
+      ]
+    },
+    {
+      "id": "chap_diff_eq",
+      "chapter_no": 13,
+      "title": "Differential Equations",
+      "book_reference": "https://books.ebalbharati.in/pdfs/1203030318.pdf",
+      "topics": [
+        { "id": "t_de_degree_order", "title": "Order and degree of a differential equation", "difficulty": "Easy" },
+        { "id": "t_de_formation", "title": "Formation of a differential equation", "difficulty": "Medium" },
+        { "id": "t_de_solution", "title": "Solution of differential equation (Variable Separable)", "difficulty": "Medium" },
+        { "id": "t_de_homogeneous", "title": "Homogeneous differential equation", "difficulty": "Hard" },
+        { "id": "t_de_linear", "title": "Linear differential equation", "difficulty": "Hard" },
+        { "id": "t_de_applications", "title": "Applications of differential equation", "difficulty": "Medium" }
+      ]
+    },
+    {
+      "id": "chap_prob_dist",
+      "chapter_no": 14,
+      "title": "Probability Distribution",
+      "book_reference": "https://books.ebalbharati.in/pdfs/1203030318.pdf",
+      "topics": [
+        { "id": "t_pd_random_var", "title": "Random variables", "difficulty": "Easy" },
+        { "id": "t_pd_discrete", "title": "Discrete random variable and its probability distribution", "difficulty": "Medium" },
+        { "id": "t_pd_continuous", "title": "Continuous random variable and its probability density function", "difficulty": "Hard" }
+      ]
+    },
+    {
+      "id": "chap_binomial_dist",
+      "chapter_no": 15,
+      "title": "Binomial Distribution",
+      "book_reference": "https://books.ebalbharati.in/pdfs/1203030318.pdf",
+      "topics": [
+        { "id": "t_bd_bernoulli", "title": "Bernoulli trials", "difficulty": "Easy" },
+        { "id": "t_bd_binomial", "title": "Binomial distribution", "difficulty": "Medium" },
+        { "id": "t_bd_mean_variance", "title": "Mean and variance of binomial distribution", "difficulty": "Medium" }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "name": "@prathamone/db",
+  "version": "1.0.0",
+  "private": true,
+  "main": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./server": "./src/server.ts",
+    "./client": "./src/client.ts",
+    "./middleware": "./src/middleware.ts",
+    "./curriculum": "./src/curriculum/index.ts",
+    "./vault": "./src/vault.ts"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.100.1",
+    "@supabase/ssr": "^0.9.0"
+  },
+  "peerDependencies": {
+    "next": "^15 || ^16"
+  }
+}
