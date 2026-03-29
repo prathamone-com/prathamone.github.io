@@ -70,13 +70,16 @@ export default function LandingPage() {
         animate="visible"
       >
         <header className="text-center mb-12">
-          <motion.div variants={itemVariants} className="flex items-center justify-center gap-2 mb-4">
-            <GraduationCap className="w-12 h-12 text-brand-primary" />
-            <h1 className="text-5xl font-extrabold tracking-tight text-brand-primary">
-              Pratham<span className="text-brand-secondary">One</span>
-            </h1>
+          <motion.div variants={itemVariants} className="flex flex-col items-center justify-center gap-6 mb-6">
+            <div className="bg-brand-primary p-8 rounded-2xl shadow-xl border border-white/10 group hover:scale-105 transition-transform cursor-default">
+              <img 
+                src="/logo-ganesha.png" 
+                alt="PrathamOne Logo" 
+                className="h-20 w-auto object-contain"
+              />
+            </div>
           </motion.div>
-          <motion.p variants={itemVariants} className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <motion.p variants={itemVariants} className="text-xl text-gray-600 max-w-2xl mx-auto font-medium">
             The intelligent AI classroom designed for Bharat. Optimized for Indian boards, curricula, and regional languages.
           </motion.p>
         </header>
