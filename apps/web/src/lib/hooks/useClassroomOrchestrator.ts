@@ -17,6 +17,7 @@ import { useState, useEffect } from 'react';
 import { useCurriculumStore } from '@/lib/store/curriculum';
 import { useOnlineStatus } from '@/lib/hooks/useOnlineStatus';
 import { fetchTopicsFromDB, getTopicsForChapter, getTranslation } from '@prathamone/db/curriculum';
+import { getOfflineRemediation } from '../utils/curriculum-offline';
 
 export type ClassroomView = 'dashboard' | 'subject' | 'topic' | 'session' | 'static_lesson' | 'shop';
 export type LessonPhase = 'concept' | 'example' | 'practice' | 'summary' | 'remediation' | 'doubt';
@@ -37,6 +38,7 @@ export function useClassroomOrchestrator() {
   // Topic Management
   const [liveTopics, setLiveTopics] = useState<any[]>([]);
   const [topicsLoading, setTopicsLoading] = useState(false);
+  const [remediationPlan, setRemediationPlan] = useState<any | null>(null);
   const [useMock, setUseMock] = useState(true);
   const [showIntro, setShowIntro] = useState(true);
 
@@ -54,7 +56,6 @@ export function useClassroomOrchestrator() {
       return () => clearTimeout(timer);
     }
   }, [showIntro]);
-
   // 3. Automated Topic Fetching
   useEffect(() => {
     if (currentView === 'topic' && activeChapter && selectedBoard && selectedGrade) {
@@ -71,6 +72,15 @@ export function useClassroomOrchestrator() {
         });
     }
   }, [currentView, activeChapter, selectedBoard, selectedGrade, activeSubject]);
+
+  // 4. Remediation Logic
+  useEffect(() => {
+    if (lessonPhase === 'remediation' && activeChapter) {
+      setRemediationPlan(getOfflineRemediation(activeChapter));
+    } else {
+      setRemediationPlan(null);
+    }
+  }, [lessonPhase, activeChapter]);
 
   const navigateBack = () => {
     if (currentView === 'topic') setCurrentView('subject');
@@ -97,6 +107,7 @@ export function useClassroomOrchestrator() {
     setLessonPhase,
     liveTopics,
     topicsLoading,
+    remediationPlan,
     useMock,
     toggleMock,
     showIntro,

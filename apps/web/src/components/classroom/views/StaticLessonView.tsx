@@ -7,8 +7,8 @@
  * Organization : AITDL Network | PrathamOne
  * Framework    : Autonomous AI Agent Development
  * Authored By  : Jawahar R Mallah
- * Version      : 1.0.0
- * Release Date : 28 March 2026
+ * Version      : 1.1.1
+ * Release Date : 29 March 2026
  * Environment  : Production
  * ==========================================================
  */
@@ -24,6 +24,8 @@ interface StaticLessonViewProps {
   activeSubject: string | null;
   activeChapter: string | null;
   activeTopic: any | null;
+  lessonPhase?: string;
+  remediationPlan?: any | null;
   onSetView: (view: any) => void;
 }
 
@@ -31,6 +33,8 @@ export const StaticLessonView: React.FC<StaticLessonViewProps> = ({
   activeSubject,
   activeChapter,
   activeTopic,
+  lessonPhase,
+  remediationPlan,
   onSetView
 }) => {
   const { selectedBoard, selectedGrade, selectedLanguage } = useCurriculumStore();
@@ -157,6 +161,79 @@ export const StaticLessonView: React.FC<StaticLessonViewProps> = ({
              </div>
            </div>
 
+           {/* AI Teacher Remediation Layer (Only in Remediation Phase) */}
+           <AnimatePresence>
+              {lessonPhase === 'remediation' && remediationPlan && (
+                <motion.div 
+                  initial={{ opacity: 0, y: 30 }} 
+                  animate={{ opacity: 1, y: 0 }}
+                  className="lg:col-span-3 mb-12"
+                >
+                  <div className="bg-gradient-to-br from-brand-primary/5 to-transparent border-2 border-brand-primary/20 rounded-[40px] p-10 shadow-2xl overflow-hidden relative group">
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-brand-primary/10 rounded-full blur-[100px] -mr-32 -mt-32" />
+                    
+                    <div className="relative z-10">
+                      <div className="flex items-center gap-6 mb-10">
+                         <div className="w-16 h-16 rounded-3xl bg-brand-primary flex items-center justify-center text-3xl shadow-xl shadow-brand-primary/20 animate-pulse">
+                            🩹
+                         </div>
+                         <div>
+                            <h2 className="text-3xl font-black text-gray-900 leading-tight">
+                               {t('remediation_active') || 'Remediation Active: Foundation Repair'}
+                            </h2>
+                            <p className="text-brand-primary font-bold uppercase tracking-widest text-sm mt-1">
+                               {remediationPlan.focus}
+                            </p>
+                         </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                         <div className="space-y-6">
+                            <h3 className="text-xl font-black text-gray-800 flex items-center gap-3">
+                               <span className="text-brand-primary">🎯</span> {t('the_root_concept') || 'The Root Concept'}
+                            </h3>
+                            <div className="p-6 bg-white rounded-3xl border border-gray-100 shadow-sm text-gray-600 font-medium leading-relaxed italic">
+                               &ldquo;{remediationPlan.concept}&rdquo;
+                            </div>
+                            <div className="p-6 bg-slate-900 rounded-2xl text-brand-success font-mono text-center text-lg font-black tracking-widest leading-relaxed">
+                               {remediationPlan.visualization}
+                            </div>
+                         </div>
+
+                         <div className="space-y-6">
+                            <h3 className="text-xl font-black text-gray-800 flex items-center gap-3">
+                               <span className="text-brand-primary">🛠️</span> {t('healing_steps') || 'Healing Steps'}
+                            </h3>
+                            <div className="space-y-4">
+                               {remediationPlan.stepByStep.map((step: string, i: number) => (
+                                 <motion.div 
+                                   key={i}
+                                   initial={{ x: -20, opacity: 0 }}
+                                   animate={{ x: 0, opacity: 1 }}
+                                   transition={{ delay: i * 0.1 }}
+                                   className="flex gap-4 p-4 hover:bg-white rounded-2xl transition-all"
+                                 >
+                                    <div className="w-8 h-8 shrink-0 rounded-full bg-brand-primary text-white flex items-center justify-center font-black text-xs">
+                                       {i + 1}
+                                    </div>
+                                    <p className="text-sm text-gray-700 font-bold leading-relaxed">{step}</p>
+                                 </motion.div>
+                               ))}
+                            </div>
+                            <button 
+                              onClick={() => onSetView('session')}
+                              className="w-full py-5 bg-brand-primary text-white rounded-[24px] font-black uppercase tracking-[0.2em] shadow-xl shadow-brand-primary/20 hover:scale-[1.02] transition-all"
+                            >
+                               {t('re_verify_mastery') || 'Re-Verify Mastery'}
+                            </button>
+                         </div>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
            {/* Right Column: Practice & Tools */}
            <div className="flex flex-col gap-8">
              <div className="bg-white rounded-[32px] p-8 border border-gray-100 shadow-sm">
@@ -198,4 +275,3 @@ export const StaticLessonView: React.FC<StaticLessonViewProps> = ({
     </div>
   );
 };
-

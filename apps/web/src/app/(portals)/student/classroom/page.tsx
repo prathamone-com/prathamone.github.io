@@ -54,6 +54,7 @@ export default function ClassroomPage() {
     setLessonPhase,
     liveTopics,
     topicsLoading,
+    remediationPlan,
     useMock,
     toggleMock,
     showIntro,
@@ -150,6 +151,8 @@ export default function ClassroomPage() {
                activeSubject={activeSubject}
                activeChapter={activeChapter}
                activeTopic={activeTopic}
+               lessonPhase={lessonPhase}
+               remediationPlan={remediationPlan}
                onSetView={setCurrentView}
             />
           )}

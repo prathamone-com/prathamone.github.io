@@ -15,6 +15,7 @@
 
 import { getSovereignChapters } from './curriculum-sovereign';
 import { getSovereignQuestions } from './curriculum-questions-sovereign';
+import { getSovereignRemediation } from './curriculum-remediation-sovereign';
 
 /**
  * Offline Curriculum Engine (Sovereign Mode)
@@ -65,6 +66,13 @@ export function getSovereignCurriculum(boardId: string, subjectId: string): any[
  */
 export function getOfflineQuestions(chapterId: string, count: number = 5): any[] {
   return getSovereignQuestions(chapterId, count);
+}
+
+/**
+ * Returns a remediation plan for an offline chapter
+ */
+export function getOfflineRemediation(chapterId: string): any | null {
+  return getSovereignRemediation(chapterId);
 }
 
 /**

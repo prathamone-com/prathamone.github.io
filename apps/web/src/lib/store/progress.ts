@@ -420,7 +420,7 @@ export const useProgressStore = create<ProgressState>()(
           // Initialize Supabase Client
           const supabase = createClient();
           
-          if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+          if (!supabase) {
              console.warn("Supabase credentials missing. Falling back to Mock State.");
              get().loadChildProfile(profileId);
              return;
@@ -459,7 +459,7 @@ export const useProgressStore = create<ProgressState>()(
           const supabase = createClient();
           const state = get();
           
-          if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+          if (!supabase) {
             console.warn("Supabase credentials missing. Sync skipped.");
             return;
           }
