@@ -44,9 +44,9 @@ export const metadata: Metadata = {
     title: "PrathamOne",
   },
   icons: {
-    icon: "/favicon.ico",
-    shortcut: "/favicon.ico",
-    apple: "/icons/icon-192x192.png",
+    icon: "/icons/icon-512x512.png",
+    shortcut: "/icons/icon-512x512.png",
+    apple: "/icons/icon-512x512.png",
   },
   metadataBase: new URL('https://prathamone.com'),
   alternates: {
