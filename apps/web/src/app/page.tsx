@@ -70,12 +70,12 @@ export default function LandingPage() {
         animate="visible"
       >
         <header className="text-center mb-12">
-          <motion.div variants={itemVariants} className="flex flex-col items-center justify-center gap-6 mb-8">
-            <div className="bg-brand-primary px-8 py-10 md:px-16 md:py-12 rounded-2xl shadow-xl border border-white/10 group hover:shadow-2xl transition-all cursor-default w-full max-w-2xl mx-auto flex items-center justify-center overflow-hidden">
+          <motion.div variants={itemVariants} className="flex flex-col items-center justify-center gap-6 mb-10">
+            <div className="bg-white px-8 py-10 md:px-16 md:py-12 rounded-3xl shadow-2xl border border-slate-200 group hover:shadow-indigo-500/10 transition-all cursor-default w-full max-w-2xl mx-auto flex items-center justify-center overflow-hidden">
               <img 
-                src="/branding/logo-white.png" 
-                alt="PrathamOne Professional Logo" 
-                className="w-full h-auto max-h-[80px] object-contain drop-shadow-md"
+                src="/branding/logo-full.png" 
+                alt="PrathamOne Official Logo" 
+                className="w-full h-auto max-h-[85px] object-contain"
               />
             </div>
           </motion.div>
