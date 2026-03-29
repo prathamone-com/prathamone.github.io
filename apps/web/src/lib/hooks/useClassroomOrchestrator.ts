@@ -16,7 +16,7 @@
 import { useState, useEffect } from 'react';
 import { useCurriculumStore } from '@/lib/store/curriculum';
 import { useOnlineStatus } from '@/lib/hooks/useOnlineStatus';
-import { fetchTopicsFromDB, getTopicsForChapter, getTranslation } from '@prathamone/db/curriculum';
+import { getTopicsForChapter, getTranslation } from '@prathamone/db/curriculum';
 import { getOfflineRemediation } from '../utils/curriculum-offline';
 
 export type ClassroomView = 'dashboard' | 'subject' | 'topic' | 'session' | 'static_lesson' | 'shop';
@@ -56,22 +56,26 @@ export function useClassroomOrchestrator() {
       return () => clearTimeout(timer);
     }
   }, [showIntro]);
-  // 3. Automated Topic Fetching
+  // 3. Automated Topic Fetching (Sovereign Local-First)
   useEffect(() => {
-    if (currentView === 'topic' && activeChapter && selectedBoard && selectedGrade) {
+    if (activeChapter && selectedBoard && selectedGrade) {
       setTopicsLoading(true);
-      fetchTopicsFromDB(selectedBoard, selectedGrade, activeSubject || 'Mathematics', activeChapter)
-        .then(topics => { 
-          setLiveTopics(topics); 
-          setTopicsLoading(false); 
-        })
-        .catch(() => {
-          // Fallback to local deterministic topics if network fails
-          setLiveTopics(getTopicsForChapter(selectedBoard, selectedGrade || 12, activeSubject || 'Mathematics', activeChapter));
-          setTopicsLoading(false);
-        });
+      
+      // Use deterministic local topics directly to support static export (GitHub Pages)
+      // This eliminates the need for dynamic API routes and ensures instant loading.
+      const topics = getTopicsForChapter(
+        selectedBoard, 
+        selectedGrade, 
+        activeSubject || 'Mathematics', 
+        activeChapter
+      );
+      
+      setLiveTopics(topics || []);
+      setTopicsLoading(false);
+    } else {
+      setLiveTopics([]);
     }
-  }, [currentView, activeChapter, selectedBoard, selectedGrade, activeSubject]);
+  }, [activeChapter, selectedBoard, selectedGrade, activeSubject]);
 
   // 4. Remediation Logic
   useEffect(() => {
