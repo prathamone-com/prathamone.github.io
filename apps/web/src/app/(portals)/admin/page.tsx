@@ -7,8 +7,8 @@
  * Organization : AITDL Network | PrathamOne
  * Framework    : Autonomous AI Agent Development
  * Authored By  : Jawahar R Mallah
- * Version      : 1.0.0
- * Release Date : 28 March 2026
+ * Version      : 1.1.0
+ * Release Date : 29 March 2026
  * Environment  : Production
  *
  * Signature    : Engineered by Jawahar R Mallah
@@ -25,8 +25,10 @@ import {
   Settings, Building2, Upload, Plus, Search, 
   CheckCircle2, AlertCircle, Trash2, Edit3, Heart, Database, Coins
 } from 'lucide-react';
-import { PrathamButton, PrathamCard } from '@prathamone/ui';
+import { PrathamButton, PrathamCard } from '@/components/classroom/ClassroomUI';
 import { useProgressStore } from '@/lib/store/progress';
+import { useCurriculumStore } from '@/lib/store/curriculum';
+import { getTranslation } from '@prathamone/db/curriculum';
 
 /**
  * PrathamOne - Admin Command Center (10/10 Sovereignty)
@@ -36,12 +38,15 @@ import { useProgressStore } from '@/lib/store/progress';
 export default function AdminDashboard() {
   const [activeView, setActiveView] = useState('Branding');
   const [primaryColor, setPrimaryColor] = useState('#6366F1'); // Default Indigo
+  
+  const { selectedLanguage, setLanguage } = useCurriculumStore();
+  const t = (key: string) => getTranslation(selectedLanguage, key);
 
   // Mock data for analytics
   const stats = [
-    { label: 'Active Students', val: '1,420', trend: '+12%', color: 'blue' },
-    { label: 'Monthly Revenue', val: '₹42,500', trend: '+8%', color: 'green' },
-    { label: 'AI Tokens Used', val: '8.2K', trend: '-2%', color: 'purple' },
+    { label: t('active_students') || 'Active Students', val: '1,420', trend: '+12%', color: 'blue' },
+    { label: t('sovereign_sync') || 'Sovereign Node Status', val: '99.9%', trend: 'OPTIMAL', color: 'green' },
+    { label: t('ai_tokens_used') || 'AI Tokens Used', val: '8.2K', trend: '-2%', color: 'purple' },
   ];
 
   const { activeBounties } = useProgressStore();
@@ -61,12 +66,12 @@ export default function AdminDashboard() {
         <div className="space-y-4">
           <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-4">Management</p>
           {[
-            { id: 'Branding', icon: Palette },
-            { id: 'Students', icon: Users },
-            { id: 'Lecturers', icon: ShieldCheck },
-            { id: 'Analytics', icon: BarChart3 },
-            { id: 'Ledger', icon: Database },
-            { id: 'Settings', icon: Settings },
+            { id: 'Branding', label: t('branding') || 'Branding', icon: Palette },
+            { id: 'Students', label: t('students') || 'Students', icon: Users },
+            { id: 'Lecturers', label: t('lecturers') || 'Lecturers', icon: ShieldCheck },
+            { id: 'Analytics', label: t('analytics') || 'Analytics', icon: BarChart3 },
+            { id: 'Ledger', label: t('ledger') || 'Ledger', icon: Database },
+            { id: 'Settings', label: t('settings') || 'Settings', icon: Settings },
           ].map((item) => (
             <button
               key={item.id}
@@ -78,7 +83,7 @@ export default function AdminDashboard() {
               }`}
             >
               <item.icon size={20} />
-              <span className="text-sm uppercase tracking-tight">{item.id}</span>
+              <span className="text-sm uppercase tracking-tight">{item.label}</span>
             </button>
           ))}
         </div>
@@ -327,6 +332,118 @@ export default function AdminDashboard() {
                           <span className="text-xs font-bold text-gray-900 w-1/3">Student ID LF-042 unlocked Avatar</span>
                           <span className="text-sm font-black text-gray-400">-150 Coins</span>
                       </div>
+                  </div>
+               </div>
+             </motion.div>
+           )}
+
+           {activeView === 'Analytics' && (
+             <motion.div 
+               key="analytics"
+               initial={{ opacity: 0, y: 20 }}
+               animate={{ opacity: 1, y: 0 }}
+               className="space-y-8"
+             >
+               <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                  <div className="lg:col-span-2 bg-white rounded-[40px] p-8 border border-gray-100 shadow-sm">
+                    <h3 className="text-xl font-black text-gray-900 uppercase tracking-tight mb-8">Pedagogical Stream Adoption</h3>
+                    <div className="space-y-6">
+                       {[
+                         { label: 'English Medium', val: 450, color: '#6366F1' },
+                         { label: 'Hindi Medium', val: 320, color: '#F59E0B' },
+                         { label: 'Marathi Medium', val: 380, color: '#10B981' },
+                         { label: 'Gujarati Medium', val: 270, color: '#EC4899' },
+                       ].map((stream) => (
+                         <div key={stream.label} className="space-y-2">
+                            <div className="flex justify-between text-xs font-black uppercase tracking-tight">
+                               <span className="text-gray-400">{stream.label}</span>
+                               <span className="text-gray-900">{stream.val} Students</span>
+                            </div>
+                            <div className="h-4 bg-gray-50 rounded-full overflow-hidden border border-gray-100 p-0.5">
+                               <motion.div 
+                                 initial={{ width: 0 }} animate={{ width: `${(stream.val/1420)*100}%` }}
+                                 className="h-full rounded-full" style={{ backgroundColor: stream.color }} 
+                               />
+                            </div>
+                         </div>
+                       ))}
+                    </div>
+                  </div>
+                  
+                  <div className="bg-brand-primary rounded-[40px] p-8 text-white flex flex-col justify-between shadow-2xl shadow-brand-primary/30">
+                     <div className="space-y-4">
+                        <div className="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center font-black text-xl italic shadow-inner">P1</div>
+                        <h4 className="text-2xl font-black leading-tight uppercase tracking-tighter">Sovereign Node Integrity</h4>
+                        <p className="text-sm font-bold opacity-60">Your institutional node is serving 88% of requests via local edge caching.</p>
+                     </div>
+                     <div className="pt-8 border-t border-white/10 mt-8">
+                        <div className="flex items-center gap-2 mb-2">
+                           <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+                           <span className="text-[10px] font-black uppercase tracking-widest text-green-400">Node Synchronized</span>
+                        </div>
+                        <p className="text-[10px] font-bold opacity-40">LAST SYNC: JUST NOW</p>
+                     </div>
+                  </div>
+               </div>
+             </motion.div>
+           )}
+
+           {activeView === 'Settings' && (
+             <motion.div 
+               key="settings"
+               initial={{ opacity: 0, y: 20 }}
+               animate={{ opacity: 1, y: 0 }}
+               className="grid grid-cols-1 lg:grid-cols-2 gap-12"
+             >
+               <PrathamCard variant="glass" className="space-y-8">
+                  <h3 className="text-xl font-black text-gray-900 uppercase tracking-tight">System Configuration</h3>
+                  
+                  <div className="space-y-6">
+                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-4">Regional Language (Gujarati Parity)</label>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-2 bg-gray-50 rounded-[32px] border border-gray-100">
+                       {[
+                         { code: 'en', name: 'English' },
+                         { code: 'hi', name: 'Hindi' },
+                         { code: 'mr', name: 'Marathi' },
+                         { code: 'gu', name: 'ગુજરાતી' }
+                       ].map(lang => (
+                         <button 
+                           key={lang.code}
+                           onClick={() => setLanguage(lang.code as any)}
+                           className={`h-14 rounded-2xl font-black text-[10px] tracking-widest uppercase transition-all ${
+                             selectedLanguage === lang.code 
+                             ? 'bg-brand-primary text-white shadow-xl shadow-brand-primary/20 scale-105' 
+                             : 'text-gray-400 hover:text-gray-600 hover:bg-white'
+                           }`}
+                         >
+                           {lang.name}
+                         </button>
+                       ))}
+                    </div>
+                  </div>
+
+                  <div className="space-y-4">
+                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-4">Institutional Domain</label>
+                    <input 
+                      type="text" 
+                      placeholder="littleflowers.prathamone.com" 
+                      defaultValue="littleflowers.prathamone.com"
+                      className="w-full h-16 rounded-2xl bg-gray-50 border-transparent focus:border-brand-primary outline-none px-6 font-bold text-gray-900" 
+                    />
+                  </div>
+
+                  <PrathamButton className="w-full">Save Configuration</PrathamButton>
+               </PrathamCard>
+
+               <div className="space-y-8">
+                  <div className="p-8 bg-blue-50/50 rounded-[40px] border border-blue-100">
+                     <div className="flex items-center gap-3 mb-6">
+                        <Globe className="text-blue-600" />
+                        <span className="text-xs font-black uppercase tracking-widest text-blue-600">Sovereign Edge Network</span>
+                     </div>
+                     <p className="text-sm font-bold text-gray-600 leading-relaxed">
+                        Your institution is currently synced with the **Sovereign Bharat Node**. This ensures 99.9% uptime even during regional connectivity drops.
+                     </p>
                   </div>
                </div>
              </motion.div>

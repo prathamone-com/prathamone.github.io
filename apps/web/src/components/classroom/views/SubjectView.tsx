@@ -24,6 +24,7 @@ import {
   SUBJECTS, getChapters, getTranslation, 
   calculateMasteryBadge 
 } from '@prathamone/db/curriculum';
+import { getSovereignCurriculum } from '@/lib/utils/curriculum-offline';
 
 interface SubjectViewProps {
   activeSubject: string | null;
@@ -49,6 +50,22 @@ export const SubjectView: React.FC<SubjectViewProps> = ({
     const entry = completedChapters.find(c => c.subject === subject && c.chapter === chapterName);
     if (!entry) return null;
     return calculateMasteryBadge(entry.accuracy || 70);
+  };
+
+  const safeGetChapters = (subject: string): string[] => {
+    // 1. Try standard DB chapters
+    const dbChapters = getChapters(selectedBoard, selectedGrade || 10, subject);
+    if (dbChapters && dbChapters.length > 0) return dbChapters;
+
+    // 2. Fallback to Sovereign Registry for Grade 10 Math
+    if (selectedGrade === 10 && (subject.toLowerCase() === 'mathematics' || subject.toLowerCase() === 'maths')) {
+      const sovereign = getSovereignCurriculum(selectedBoard, subject);
+      if (sovereign && sovereign.length > 0) {
+        return sovereign.map((c: any) => c.title);
+      }
+    }
+
+    return [];
   };
 
   return (
@@ -96,7 +113,7 @@ export const SubjectView: React.FC<SubjectViewProps> = ({
                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
             >
               {SUBJECTS.map((sub, i) => {
-                 const subjectChapters = getChapters(selectedBoard, selectedGrade || 10, sub.id);
+                 const subjectChapters = safeGetChapters(sub.id);
                  const completedInSubject = completedChapters.filter(c => c.subject === sub.id).length;
                  const progressPct = Math.min(100, Math.round((completedInSubject / (subjectChapters.length || 1)) * 100));
                  
@@ -158,7 +175,7 @@ export const SubjectView: React.FC<SubjectViewProps> = ({
             >
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {[
-                  ...getChapters(selectedBoard, selectedGrade || 10, activeSubject).map(c => ({ name: c, isCustom: false })),
+                  ...safeGetChapters(activeSubject || '').map(c => ({ name: c, isCustom: false })),
                   ...(customChapters || [])
                     .filter((c: any) => c.subject === activeSubject)
                     .map((c: any) => ({ name: c.title, isCustom: true }))

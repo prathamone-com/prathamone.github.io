@@ -7,8 +7,8 @@
  * Organization : AITDL Network | PrathamOne
  * Framework    : Autonomous AI Agent Development
  * Authored By  : Jawahar R Mallah
- * Version      : 1.0.0
- * Release Date : 28 March 2026
+ * Version      : 1.1.0
+ * Release Date : 29 March 2026
  * Environment  : Production
  * ==========================================================
  */
@@ -127,10 +127,10 @@ export function AIReviewCard({
            </h4>
            <div className="flex flex-wrap gap-3">
               {weakTopics.map(topic => (
-                <div key={topic} className="px-4 py-2 bg-white border border-gray-200 rounded-xl flex items-center gap-2 group hover:border-brand-primary transition-all">
-                   <div className="w-1.5 h-1.5 rounded-full bg-orange-400 group-hover:bg-brand-primary" />
-                   <span className="text-sm font-bold text-gray-700">{topic}</span>
-                </div>
+                 <div key={topic} className="px-4 py-2 bg-white border border-gray-200 rounded-xl flex items-center gap-2 group hover:border-brand-primary transition-all">
+                    <div className="w-1.5 h-1.5 rounded-full bg-orange-400 group-hover:bg-brand-primary" />
+                    <span className="text-sm font-bold text-gray-700">{topic}</span>
+                 </div>
               ))}
            </div>
         </div>
@@ -150,7 +150,7 @@ export function AIReviewCard({
           onClick={onContinue}
           className="flex-1 px-8 py-5 rounded-2xl bg-brand-primary text-white font-extrabold text-sm hover:scale-[1.02] shadow-xl shadow-brand-primary/20 transition-all flex items-center justify-center gap-2 group"
         >
-          {accuracy >= 80 ? 'Master the Next Topic' : 'Proceed to Summary'}
+          {accuracy >= 80 ? 'Master the Next Topic' : accuracy < 70 ? 'Quick Re-Learn' : 'Proceed to Summary'}
           <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-all" />
         </button>
       </div>

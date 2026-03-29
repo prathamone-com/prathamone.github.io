@@ -7,8 +7,8 @@
  * Organization : AITDL Network | PrathamOne
  * Framework    : Autonomous AI Agent Development
  * Authored By  : Jawahar R Mallah
- * Version      : 1.0.0
- * Release Date : 28 March 2026
+ * Version      : 1.1.0
+ * Release Date : 29 March 2026
  * Environment  : Production
  *
  * Signature    : Engineered by Jawahar R Mallah
@@ -21,6 +21,9 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useProgressStore } from '@/lib/store/progress';
+import { useCurriculumStore } from '@/lib/store/curriculum';
+import { LANGUAGES } from '@prathamone/db/curriculum';
+import Link from 'next/link';
 import { 
   GraduationCap, 
   Users, 
@@ -60,6 +63,7 @@ function LoginForm() {
 
   const router = useRouter();
   const { initializeDemoData } = useProgressStore();
+  const { selectedLanguage, setLanguage } = useCurriculumStore();
 
   const [formError, setFormError] = useState<string | null>(null);
 
@@ -176,10 +180,28 @@ function LoginForm() {
                 Join Now
               </button>
             </div>
+
+            {/* Language/Stream Selector */}
+            <div className="flex items-center justify-center gap-2 mb-8 bg-gray-50 p-1.5 rounded-2xl border border-gray-100 inline-flex mx-auto">
+               {Object.values(LANGUAGES).map(lang => (
+                 <button
+                   key={lang.code}
+                   onClick={() => setLanguage(lang.code as any)}
+                   className={`px-4 py-2 rounded-xl text-[10px] font-black transition-all ${
+                     selectedLanguage === lang.code 
+                       ? 'bg-blue-900 text-white shadow-xl shadow-blue-900/10' 
+                       : 'text-gray-400 hover:text-gray-600'
+                   }`}
+                 >
+                   {lang.nativeName}
+                 </button>
+               ))}
+            </div>
+
             <h2 className="text-3xl font-black text-gray-900 mb-2">
               {mode === 'login' ? 'Welcome Back' : 'Create Account'}
             </h2>
-            <p className="text-gray-400 font-medium">Select your role to continue</p>
+            <p className="text-gray-400 font-medium tracking-tight">Access your Sovereign Classroom medium.</p>
           </div>
 
           <div className="grid grid-cols-3 gap-3 mb-10">
@@ -294,8 +316,8 @@ function LoginForm() {
             </div>
           </div>
 
-          <p className="mt-8 text-center text-xs text-gray-400 font-bold uppercase tracking-widest">
-            By continuing, you agree to the Sovereign AI Policy.
+          <p className="mt-8 text-center text-[10px] text-gray-400 font-bold uppercase tracking-[0.2em] leading-relaxed">
+            By continuing, you agree to our <Link href="/terms" className="text-blue-900 hover:underline">Terms</Link> and <Link href="/privacy" className="text-blue-900 hover:underline">Privacy Policy</Link>.
           </p>
         </div>
       </motion.div>

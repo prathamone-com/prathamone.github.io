@@ -7,8 +7,8 @@
  * Organization : AITDL Network | PrathamOne
  * Framework    : Autonomous AI Agent Development
  * Authored By  : Jawahar R Mallah
- * Version      : 1.0.0
- * Release Date : 28 March 2026
+ * Version      : 1.1.2
+ * Release Date : 29 March 2026
  * Environment  : Production
  * ==========================================================
  */
@@ -36,10 +36,10 @@ interface SessionViewProps {
   activeSubject: string | null;
   activeChapter: string | null;
   activeTopic: any | null;
-  lessonPhase: 'concept' | 'example' | 'practice' | 'summary' | 'doubt';
+  lessonPhase: 'concept' | 'example' | 'practice' | 'summary' | 'remediation' | 'doubt';
   useMock: boolean;
   onSetView: (view: any) => void;
-  onSetLessonPhase: (phase: any) => void;
+  onSetLessonPhase: (phase: 'concept' | 'example' | 'practice' | 'summary' | 'remediation' | 'doubt') => void;
   onToggleMock: () => void;
 }
 
@@ -83,6 +83,7 @@ export const SessionView: React.FC<SessionViewProps> = ({
     if (lessonPhase === 'concept') return 'Lecture Composer';
     if (lessonPhase === 'example') return 'Pedagogical Optimizer';
     if (lessonPhase === 'practice') return 'Assessment Agent';
+    if (lessonPhase === 'remediation') return 'Socratic Bridge';
     if (lessonPhase === 'doubt') return 'Socratic Bridge';
     if (lessonPhase === 'summary') return 'Report Agent';
     return 'Director Agent';
@@ -115,16 +116,21 @@ export const SessionView: React.FC<SessionViewProps> = ({
 
   // Handle Practice phase JSON parsing
   useEffect(() => {
-    if (lessonPhase === 'practice' && messages.length > 0 && !isStreaming) {
-      const lastMsg = messages[messages.length - 1].text;
-      const parsed = extractJSONFromMessage<any>(lastMsg);
-      if (parsed) {
-        setQuizQuestions(normalizePracticeQuestions(parsed));
-      } else {
-        setQuizQuestions(getQuestionsForChapter(activeChapter || '', 3, weakAreas, 'medium', selectedLanguage));
+    if (lessonPhase === 'practice' && messages.length > 0) {
+      const lastMsg = messages[messages.length - 1];
+      
+      // Only attempt to parse if the message is marked as complete by the stream
+      if (lastMsg.isComplete) {
+        const parsed = extractJSONFromMessage<any>(lastMsg.text);
+        if (parsed) {
+          setQuizQuestions(normalizePracticeQuestions(parsed));
+        } else {
+          // Fallback to deterministic questions if AI output is malformed
+          setQuizQuestions(getQuestionsForChapter(activeChapter || '', 3, weakAreas, 'medium', selectedLanguage));
+        }
       }
     }
-  }, [lessonPhase, messages, isStreaming, activeChapter, weakAreas]);
+  }, [lessonPhase, messages, activeChapter, weakAreas, selectedLanguage]);
 
   const advancePhase = (phase: typeof lessonPhase) => {
     onSetLessonPhase(phase);
@@ -307,7 +313,14 @@ export const SessionView: React.FC<SessionViewProps> = ({
                           if (pct < 70) addWeakArea(activeChapter || '');
                           markChapterComplete(activeSubject || '', activeChapter || '', ['concept', 'practice'], pct);
                         }}
-                        onAdvance={() => advancePhase('summary')}
+                        onAdvance={() => {
+                          // Adaptive Routing: If score < 70%, trigger remediation
+                          if (lastQuizScore !== null && lastQuizScore < 70) {
+                            onSetLessonPhase('remediation');
+                          } else {
+                            advancePhase('summary');
+                          }
+                        }}
                       />
                     </div>
                   ) : (
@@ -359,13 +372,18 @@ export const SessionView: React.FC<SessionViewProps> = ({
                   <span className="font-bold text-sm">{t('class_discussion') || 'Class Discussion'}</span>
                 </div>
                 <div className="flex-1 p-4 flex flex-col gap-4 overflow-y-auto">
-                  {messages.map((msg, i) => {
+                  {messages.map((msg) => {
                     const t = PERSONAS.find(p => p.id === msg.teacherId);
                     const isLead = t?.role?.includes('Teacher') || t?.role?.includes('Scholar');
                     return (
-                      <div key={i} className={`flex flex-col gap-1 max-w-[85%] ${isLead ? 'self-start' : 'self-end items-end'}`}>
-                        <span className="text-[10px] font-bold text-gray-400 mx-1">{t?.name || 'Agent'}</span>
-                        <div className={`p-3 rounded-2xl text-sm shadow-sm ${isLead ? 'bg-gray-100 text-gray-700' : 'bg-brand-primary text-white'}`}>
+                      <div key={msg.id} className={`flex flex-col gap-1 max-w-[85%] ${isLead ? 'self-start' : 'self-end items-end'}`}>
+                        <span className="text-[10px] font-bold text-gray-400 mx-1">
+                          {t?.name || 'Agent'} 
+                          {!msg.isComplete && <span className="ml-1 animate-pulse italic">typing...</span>}
+                        </span>
+                        <div className={`p-3 rounded-2xl text-sm shadow-sm transition-all ${
+                          isLead ? 'bg-gray-100 text-gray-700' : 'bg-brand-primary text-white scale-100'
+                        }`}>
                           {msg.text}
                         </div>
                       </div>

@@ -7,8 +7,8 @@
  * Organization : AITDL Network | PrathamOne
  * Framework    : Autonomous AI Agent Development
  * Authored By  : Jawahar R Mallah
- * Version      : 1.0.0
- * Release Date : 28 March 2026
+ * Version      : 1.1.0
+ * Release Date : 29 March 2026
  * Environment  : Production
  * ==========================================================
  */
@@ -21,6 +21,9 @@ import { useCurriculumStore } from '@/lib/store/curriculum';
 import { useProgressStore } from '@/lib/store/progress';
 import { LANGUAGES, getTranslation } from '@prathamone/db/curriculum';
 
+/**
+ * IntroSplash: Cinematic welcome experience for the student.
+ */
 export const IntroSplash = ({ currentStreak }: { currentStreak: number }) => {
   const { selectedLanguage } = useCurriculumStore();
   const t = (key: string) => getTranslation(selectedLanguage, key);
@@ -72,6 +75,9 @@ export const IntroSplash = ({ currentStreak }: { currentStreak: number }) => {
   );
 };
 
+/**
+ * LanguageSwitcher: Toggle between English, Hindi, and Regional languages.
+ */
 export const LanguageSwitcher = () => {
   const { selectedLanguage, setLanguage } = useCurriculumStore();
   
@@ -90,6 +96,87 @@ export const LanguageSwitcher = () => {
           {lang.nativeName}
         </button>
       ))}
+    </div>
+  );
+};
+
+/**
+ * PrathamButton: Standardized premium button for the platform.
+ */
+export const PrathamButton = ({ 
+  children, 
+  onClick, 
+  className = '',
+  disabled = false,
+  variant = 'primary',
+  size = 'md'
+}: { 
+  children: React.ReactNode, 
+  onClick?: () => void, 
+  className?: string,
+  disabled?: boolean,
+  variant?: 'primary' | 'secondary' | 'ghost' | 'outline',
+  size?: 'sm' | 'md' | 'lg'
+}) => {
+  const variants = {
+    primary: 'bg-brand-primary text-white hover:shadow-brand-primary/20',
+    secondary: 'bg-white text-brand-primary border-2 border-brand-primary/10 hover:bg-brand-primary/5',
+    ghost: 'bg-transparent text-gray-500 hover:bg-gray-50',
+    outline: 'bg-transparent text-brand-primary border-2 border-brand-primary hover:bg-brand-primary hover:text-white'
+  };
+
+  const sizes = {
+    sm: 'px-4 py-2 text-[9px]',
+    md: 'px-8 py-4 text-[11px]',
+    lg: 'px-12 py-5 text-sm'
+  };
+
+  return (
+    <motion.button
+      whileHover={!disabled ? { scale: 1.02 } : {}}
+      whileTap={!disabled ? { scale: 0.98 } : {}}
+      onClick={onClick}
+      disabled={disabled}
+      className={`
+        relative inline-flex items-center justify-center gap-2
+        rounded-2xl font-black uppercase tracking-widest 
+        transition-all shadow-sm hover:shadow-xl
+        disabled:opacity-50 disabled:cursor-not-allowed
+        ${variants[variant as keyof typeof variants]}
+        ${sizes[size as keyof typeof sizes]}
+        ${className}
+      `}
+    >
+      {children}
+    </motion.button>
+  );
+};
+
+/**
+ * PrathamCard: Premium container with consistent shadows and glassmorphism.
+ */
+export const PrathamCard = ({ 
+  children, 
+  className = '',
+  variant = 'white'
+}: { 
+  children: React.ReactNode, 
+  className?: string,
+  variant?: 'white' | 'glass' | 'blue'
+}) => {
+  const variants = {
+    white: 'bg-white border-gray-100',
+    glass: 'bg-white/70 backdrop-blur-xl border-white/50 shadow-2xl',
+    blue: 'bg-brand-primary text-white border-white/10 shadow-indigo-500/20'
+  };
+
+  return (
+    <div className={`
+      p-8 rounded-[40px] border shadow-sm
+      ${variants[variant as keyof typeof variants]}
+      ${className}
+    `}>
+      {children}
     </div>
   );
 };

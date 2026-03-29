@@ -7,8 +7,8 @@
  * Organization : AITDL Network | PrathamOne
  * Framework    : Autonomous AI Agent Development
  * Authored By  : Jawahar R Mallah
- * Version      : 1.0.0
- * Release Date : 28 March 2026
+ * Version      : 1.1.0
+ * Release Date : 29 March 2026
  * Environment  : Production
  *
  * Signature    : Engineered by Jawahar R Mallah
@@ -122,6 +122,7 @@ export interface ProgressState {
   initializeDemoData: () => void;
   loadChildProfile: (profileId: string) => void;
   fetchSovereignProfile: (profileId: string) => Promise<void>;
+  syncOfflineProgress: (profileId: string) => Promise<void>;
   resetProgress: () => void;
   spendCoins: (amount: number, itemId: string, itemName: string) => boolean;
 }
@@ -450,6 +451,37 @@ export const useProgressStore = create<ProgressState>()(
         } catch (e) {
           console.error("Execution error during Supabase sync:", e);
           get().loadChildProfile(profileId);
+        }
+      },
+
+      syncOfflineProgress: async (profileId: string) => {
+        try {
+          const supabase = createClient();
+          const state = get();
+          
+          if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+            console.warn("Supabase credentials missing. Sync skipped.");
+            return;
+          }
+
+          const { error } = await supabase
+            .from('Sovereign_Profiles')
+            .upsert({
+              id: profileId,
+              studentName: state.studentName,
+              coins: state.coins,
+              currentStreak: state.currentStreak,
+              completedChapters: state.completedChapters,
+              recentActivity: state.recentActivity,
+              unlockedItems: state.unlockedItems,
+              totalMinutes: state.totalMinutesStudied,
+              last_sync: new Date().toISOString()
+            });
+
+          if (error) throw error;
+          console.log("Sovereign Sync Successful");
+        } catch (e) {
+          console.error("Sovereign Sync Failed:", e);
         }
       },
 

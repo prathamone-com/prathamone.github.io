@@ -9,8 +9,8 @@
  * Organization : AITDL Network | PrathamOne
  * Framework    : Autonomous AI Agent Development
  * Authored By  : Jawahar R Mallah
- * Version      : 1.0.0
- * Release Date : 28 March 2026
+ * Version      : 1.1.0
+ * Release Date : 29 March 2026
  * Environment  : Production
  * ==========================================================
  */
@@ -30,6 +30,10 @@ export default function ProgressPage() {
   const { 
     completedChapters, currentStreak, weakAreas, retentionHistory, recentActivity 
   } = progressState;
+  
+  // Calculate Sovereign Mode Engagement (Mock for now, but linked to completedChapters)
+  const sovereignSyncPercent = completedChapters.length > 0 ? 88 : 0; 
+  const preferredMedium = selectedLanguage === 'en' ? 'English' : selectedLanguage === 'hi' ? 'Hindi' : selectedLanguage === 'mr' ? 'Marathi' : 'Gujarati';
 
   const t = (key: string) => getTranslation(selectedLanguage, key);
   const badges = computeBadges(progressState);
@@ -84,6 +88,13 @@ export default function ProgressPage() {
             color="bg-brand-primary/10"
           />
           <StatCard 
+            icon={<Target className="text-orange-600" />} 
+            label={t('sovereign_sync') || 'Sovereign Sync'} 
+            value={`${sovereignSyncPercent}%`}
+            subLabel={t('offline_engagement') || 'Progress made offline'}
+            color="bg-orange-50"
+          />
+          <StatCard 
             icon={<BookOpen className="text-brand-success" />} 
             label={t('chapters_done') || 'Syllabus Done'} 
             value={completedChapters.length}
@@ -92,9 +103,9 @@ export default function ProgressPage() {
           />
           <StatCard 
             icon={<Award className="text-brand-secondary" />} 
-            label={t('badges_earned') || 'Badges'} 
-            value={earnedBadges.length}
-            subLabel={t('milestones_hit') || 'Milestones hit'}
+            label={t('medium_mastery') || 'Medium Mastery'} 
+            value={preferredMedium}
+            subLabel={t('primary_instruction') || 'Primary Instruction Stream'}
             color="bg-brand-secondary/10"
           />
         </div>

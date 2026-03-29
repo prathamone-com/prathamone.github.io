@@ -9,8 +9,8 @@
  * Organization : AITDL Network | PrathamOne
  * Framework    : Autonomous AI Agent Development
  * Authored By  : Jawahar R Mallah
- * Version      : 1.0.0
- * Release Date : 28 March 2026
+ * Version      : 1.1.0
+ * Release Date : 29 March 2026
  * Environment  : Production
  *
  * Signature    : Engineered by Jawahar R Mallah
@@ -27,6 +27,10 @@ import {
   GraduationCap,
   ChevronRight,
   School,
+  ShieldCheck,
+  Zap,
+  Globe,
+  Cpu
 } from "lucide-react";
 import { useCurriculumStore } from "@/lib/store/curriculum";
 import {
@@ -37,7 +41,7 @@ import {
   type BoardId,
   LANGUAGES,
 } from "@prathamone/db";
-import { PrathamButton, PrathamCard } from "@prathamone/ui";
+import { PrathamButton, PrathamCard } from "@/components/classroom/ClassroomUI";
 
 /**
  * PrathamOne - Main Landing Page
@@ -97,18 +101,47 @@ export default function LandingPage() {
               />
             </div>
           </motion.div>
+          <motion.h1
+            variants={itemVariants}
+            className="text-4xl md:text-6xl font-black text-gray-900 mb-6 tracking-tight leading-[1.1]"
+          >
+            Sovereign AI Classroom <br />
+            <span className="text-brand-primary">for the Future of Bharat.</span>
+          </motion.h1>
           <motion.p
             variants={itemVariants}
-            className="text-xl text-gray-600 max-w-2xl mx-auto font-medium"
+            className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto font-medium leading-relaxed"
           >
-            The intelligent AI classroom designed for Bharat. Optimized for
-            Indian boards, curricula, and regional languages.
+            The intelligent, offline-first educational ledger designed for Indian excellence. 
+            Optimized for regional streams and indigenous curricula.
           </motion.p>
         </header>
 
+        {/* Feature Highlights */}
+        <motion.div 
+          variants={itemVariants}
+          className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16"
+        >
+           <FeatureCard 
+             icon={<Cpu className="text-brand-primary" />} 
+             title="Sovereign Engine" 
+             desc="Offline-first AI pedagogy with local data sovereignty."
+           />
+           <FeatureCard 
+             icon={<Languages className="text-brand-secondary" />} 
+             title="Multi-Stream Parity" 
+             desc="Native instruction in English, Hindi, Marathi, & Gujarati."
+           />
+           <FeatureCard 
+             icon={<ShieldCheck className="text-brand-success" />} 
+             title="Institutional Grade" 
+             desc="Secure, white-labeled control for schools and government."
+           />
+        </motion.div>
+
         <motion.div
           variants={itemVariants}
-          className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12"
+          className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16"
         >
           {/* Curriculum Selection Card */}
           <div className="pratham-card p-8 flex flex-col gap-6">
@@ -258,16 +291,29 @@ export default function LandingPage() {
           </div>
         </motion.div>
 
-        <motion.div variants={itemVariants} className="flex justify-center">
+        <motion.div variants={itemVariants} className="flex flex-col items-center gap-6">
           <PrathamButton
             disabled={!selectedGrade}
             onClick={() => router.push("/student/classroom")}
             size="lg"
-            className="px-12"
+            className="px-16 h-20 text-xl shadow-2xl shadow-brand-primary/20"
           >
-            Enter Classroom
-            <ChevronRight className="w-6 h-6" />
+            Enter Sovereign Classroom
+            <ChevronRight className="w-8 h-8" />
           </PrathamButton>
+          <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.3em]">Authorized Access Only • Sovereign Node Active</p>
+        </motion.div>
+
+        {/* Trust Layer */}
+        <motion.div 
+          variants={itemVariants}
+          className="mt-28 flex flex-col items-center gap-8 opacity-40 grayscale"
+        >
+           <span className="text-[10px] font-black text-gray-400 uppercase tracking-[0.4em]">Powered by the Sovereign Bharat Network</span>
+           <div className="flex flex-wrap justify-center gap-12">
+              <div className="flex items-center gap-2 font-black text-xl italic tracking-tighter opacity-50">PRATHAMONE</div>
+              <div className="flex items-center gap-2 font-black text-xl italic tracking-tighter opacity-50 underline decoration-4 decoration-brand-primary">AITDL.NETWORK</div>
+           </div>
         </motion.div>
 
         {/* 🏛️ Absolute Full-width Global Footer breakout */}
@@ -277,20 +323,24 @@ export default function LandingPage() {
               {/* BRAND SECTION (IDENTITY) */}
               <div className="space-y-4 col-span-2 lg:col-span-1">
                 <div className="flex items-center gap-3">
-                  <div className="bg-white p-1.5 rounded-xl">
+                  <div className="bg-white p-1.5 rounded-xl shadow-xl shadow-white/10 group hover:scale-110 transition-transform">
                     <img
                       src="/logo-ganesha.png"
                       alt="Logo"
-                      className="w-8 h-8 object-contain shadow-sm"
+                      className="w-10 h-10 object-contain"
                     />
                   </div>
-                  <span className="text-xl font-bold tracking-tight">
-                    PrathamOne Eduwork
-                  </span>
+                  <div className="flex flex-col">
+                    <span className="text-xl font-black tracking-tighter leading-none">
+                      PrathamOne
+                    </span>
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-brand-secondary">
+                      Sovereign AI
+                    </span>
+                  </div>
                 </div>
-                <p className="text-indigo-50/70 text-[13px] leading-relaxed max-w-xs font-medium">
-                  The intelligent AI classroom designed for Indian education
-                  boards. Empowering Bharat with pedagogical excellence.
+                <p className="text-indigo-50/70 text-[13px] leading-relaxed max-w-xs font-medium italic">
+                  Empowering Bharat with pedagogical excellence through Sovereign (Offline-First) AI. 
                 </p>
               </div>
 
@@ -301,22 +351,23 @@ export default function LandingPage() {
                 </h4>
                 <a
                   href="/student"
-                  className="text-sm font-semibold text-white hover:text-brand-secondary transition-all"
+                  className="text-sm font-bold text-white hover:text-brand-secondary transition-all flex items-center gap-2 group"
                 >
+                  <div className="w-1 h-1 rounded-full bg-brand-secondary opacity-0 group-hover:opacity-100 transition-opacity" />
                   Student Classroom
                 </a>
                 <a
-                  href="/staff"
-                  className="text-sm font-semibold text-white hover:text-brand-secondary transition-all opacity-40 pointer-events-none"
-                >
-                  Staff Hub (Next)
-                </a>
-                <a
                   href="/admin"
-                  className="text-sm font-semibold text-white hover:text-brand-secondary transition-all"
+                  className="text-sm font-bold text-white hover:text-brand-secondary transition-all flex items-center gap-2 group"
                 >
+                  <div className="w-1 h-1 rounded-full bg-brand-secondary opacity-0 group-hover:opacity-100 transition-opacity" />
                   Admin Dashboard
                 </a>
+                <div className="pt-2">
+                  <span className="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-[9px] font-black uppercase tracking-widest text-white/40">
+                    Staff Hub Coming Soon
+                  </span>
+                </div>
               </div>
 
               {/* GOVERNANCE SECTION (LEGAL) */}
@@ -326,14 +377,16 @@ export default function LandingPage() {
                 </h4>
                 <a
                   href="/terms"
-                  className="text-sm font-semibold text-white hover:text-brand-secondary transition-all opacity-40 pointer-events-none"
+                  className="text-sm font-bold text-white hover:text-brand-secondary transition-all flex items-center gap-2 group"
                 >
+                  <div className="w-1 h-1 rounded-full bg-brand-secondary opacity-0 group-hover:opacity-100 transition-opacity" />
                   Terms of Use
                 </a>
                 <a
                   href="/privacy"
-                  className="text-sm font-semibold text-white hover:text-brand-secondary transition-all opacity-40 pointer-events-none"
+                  className="text-sm font-bold text-white hover:text-brand-secondary transition-all flex items-center gap-2 group"
                 >
+                  <div className="w-1 h-1 rounded-full bg-brand-secondary opacity-0 group-hover:opacity-100 transition-opacity" />
                   Privacy Policy
                 </a>
               </div>
@@ -348,7 +401,7 @@ export default function LandingPage() {
                     href="https://aitdl.com"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-sm font-semibold text-white hover:text-brand-secondary transition-all"
+                    className="text-sm font-bold text-white hover:text-brand-secondary transition-all"
                   >
                     aitdl.com
                   </a>
@@ -356,7 +409,7 @@ export default function LandingPage() {
                     href="https://prathamone.com"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-sm font-semibold text-white hover:text-brand-secondary transition-all"
+                    className="text-sm font-bold text-white hover:text-brand-secondary transition-all"
                   >
                     prathamone.com
                   </a>
@@ -365,27 +418,27 @@ export default function LandingPage() {
             </div>
 
             {/* LEGAL ATTRIBUTION - ZERO FORMAT (CRYSTAL CLEAR SECONDARY TEXT) */}
-            <div className="mb-8 pt-4">
-              <p className="text-[11px] text-white/40 leading-relaxed font-medium tracking-normal">
-                Syllabus artifacts provided under the Open Access Policy of the
-                eBalbharati Bureau, Pune.
+            <div className="mb-8 pt-4 border-t border-white/10">
+              <p className="text-[11px] text-white/40 leading-relaxed font-medium tracking-normal max-w-4xl">
+                Pedagogical syllabus artifacts and curriculum hierarchies are provided under the Open Access Policy of the
+                eBalbharati Bureau, Pune. PrathamOne is an independent AI delivery platform.
               </p>
             </div>
 
             {/* FINAL COPYRIGHT BAR (CRYSTAL CLEAR SUBTLE BAR) */}
-            <div className="pt-6 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] font-bold uppercase tracking-[0.25em] text-white/10">
+            <div className="pt-6 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] font-bold uppercase tracking-[0.25em] text-white/20">
               <div className="flex items-center gap-2">
                 <span>© {new Date().getFullYear()} PrathamOne Eduwork</span>
               </div>
               <div className="flex items-center gap-3">
                 <span className="hidden md:inline">•</span>
                 <span>
-                  Managed by{" "}
+                  Engineered by{" "}
                   <a
                     href="https://aitdl.com"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="hover:text-white transition-all"
+                    className="hover:text-white transition-all text-brand-secondary"
                   >
                     AITDL NETWORK
                   </a>
@@ -395,6 +448,18 @@ export default function LandingPage() {
           </div>
         </footer>
       </motion.div>
+    </div>
+  );
+}
+
+function FeatureCard({ icon, title, desc }: { icon: React.ReactNode, title: string, desc: string }) {
+  return (
+    <div className="bg-white/50 backdrop-blur-sm p-8 rounded-[32px] border border-white/50 shadow-sm flex flex-col gap-4 text-center items-center group hover:bg-white transition-all">
+       <div className="w-14 h-14 rounded-2xl bg-gray-50 flex items-center justify-center shadow-inner group-hover:scale-110 transition-transform">
+         {icon}
+       </div>
+       <h3 className="font-black text-gray-900 uppercase tracking-widest text-xs">{title}</h3>
+       <p className="text-xs font-medium text-gray-500 leading-relaxed">{desc}</p>
     </div>
   );
 }

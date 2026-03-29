@@ -7,8 +7,8 @@
  * Organization : AITDL Network | PrathamOne
  * Framework    : Autonomous AI Agent Development
  * Authored By  : Jawahar R Mallah
- * Version      : 1.0.0
- * Release Date : 28 March 2026
+ * Version      : 1.1.0
+ * Release Date : 29 March 2026
  * Environment  : Production
  * ==========================================================
  */
@@ -17,11 +17,13 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { BookOpen, HelpCircle, FileText, BarChart } from 'lucide-react';
+import { BookOpen, HelpCircle, FileText, BarChart, Globe } from 'lucide-react';
 import { useProgressStore } from '@/lib/store/progress';
 import { useCurriculumStore } from '@/lib/store/curriculum';
-import { SUBJECTS, getChapters, getQuestionsForChapter, getTranslation } from '@prathamone/db/curriculum';
+import { SUBJECTS, getChapters, getQuestionsForChapter, getTranslation, LANGUAGES } from '@prathamone/db/curriculum';
 import { useRouter } from 'next/navigation';
+import { ShoppingBag } from 'lucide-react';
+import { getSovereignCurriculum, getOfflineQuestions } from '@/lib/utils/curriculum-offline';
 
 interface DashboardViewProps {
   isOnline?: boolean;
@@ -32,6 +34,9 @@ interface DashboardViewProps {
   onSetQuizQuestions: (questions: any[]) => void;
 }
 
+/**
+ * DashboardView: Main student portal with action grid and progress tracking.
+ */
 export const DashboardView: React.FC<DashboardViewProps> = ({
   isOnline = true,
   onSetView,
@@ -41,29 +46,74 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   onSetQuizQuestions
 }) => {
   const router = useRouter();
-  const { selectedLanguage, selectedBoard, selectedGrade } = useCurriculumStore();
+  const { selectedLanguage, setLanguage, selectedBoard, selectedGrade } = useCurriculumStore();
   const { currentStreak, completedChapters, weakAreas, recentActivity, coins, verifiedChapters } = useProgressStore();
   
   const t = (key: string) => getTranslation(selectedLanguage, key);
 
+  const safeGetChapters = (subject: string): string[] => {
+    // 1. Try standard DB chapters
+    const dbChapters = getChapters(selectedBoard, selectedGrade || 10, subject);
+    if (dbChapters && dbChapters.length > 0) return dbChapters;
+
+    // 2. Fallback to Sovereign Registry for Grade 10 Math
+    if (selectedGrade === 10 && (subject.toLowerCase() === 'mathematics' || subject.toLowerCase() === 'maths')) {
+      const sovereign = getSovereignCurriculum(selectedBoard, subject);
+      if (sovereign && sovereign.length > 0) {
+        return sovereign.map((c: any) => c.title);
+      }
+    }
+
+    return [];
+  };
+
   return (
     <div className="flex-1 overflow-y-auto p-6 md:p-8">
-      {/* Top Stats Bar */}
+      {/* Top Stats & Context Bar */}
       <div className="flex flex-wrap items-center gap-4 mb-8">
+        
+        {/* Medium of Instruction Selector (Bharat Multi-stream Support) */}
+        <div className="flex items-center gap-1.5 p-1 bg-white rounded-2xl border border-gray-100 shadow-sm">
+           <div className="px-3 py-1 text-[9px] font-black uppercase tracking-widest text-gray-400 border-r border-gray-100 flex items-center gap-2">
+              <Globe className="w-3 h-3" /> Medium
+           </div>
+           <div className="flex items-center gap-1">
+              {Object.values(LANGUAGES).map(lang => (
+                <button
+                  key={lang.code}
+                  onClick={() => setLanguage(lang.code as any)}
+                  className={`px-3 py-1.5 rounded-xl text-[10px] font-bold transition-all ${
+                    selectedLanguage === lang.code 
+                      ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20 scale-105' 
+                      : 'text-gray-400 hover:text-gray-600 hover:bg-gray-50 uppercase tracking-tighter'
+                  }`}
+                >
+                  {lang.nativeName}
+                </button>
+              ))}
+           </div>
+        </div>
+
         <div className="px-5 py-2.5 bg-orange-50 rounded-2xl border border-orange-100 flex items-center gap-3 shadow-sm hover:shadow-md transition-all">
           <span className="text-xl">🔥</span>
           <span className="text-sm font-black text-orange-600 tracking-tight">{currentStreak} {t('day_streak')}</span>
         </div>
+        
         <button 
-          onClick={() => onSetView('shop')}
-          className="px-5 py-2.5 bg-yellow-50 rounded-2xl border border-yellow-100 flex items-center gap-3 shadow-sm hover:shadow-md hover:bg-yellow-100 hover:scale-[1.02] transition-all cursor-pointer"
+          onClick={() => router.push('/student/rewards')}
+          className="px-5 py-2.5 bg-yellow-50 rounded-2xl border border-yellow-100 flex items-center gap-3 shadow-sm hover:shadow-md hover:bg-yellow-100 hover:scale-[1.02] transition-all cursor-pointer group"
         >
-          <span className="text-xl font-black text-yellow-500 mb-0.5">₹</span>
-          <span className="text-sm font-black text-yellow-600 tracking-tight">{coins} Pratham Coins</span>
+          <div className="flex items-center gap-2">
+            <span className="text-xl font-black text-yellow-500 mb-0.5 group-hover:rotate-12 transition-transform">₹</span>
+            <span className="text-sm font-black text-yellow-600 tracking-tight">{coins}</span>
+          </div>
+          <div className="w-[1px] h-4 bg-yellow-200 mx-1" />
+          <ShoppingBag className="w-3.5 h-3.5 text-yellow-600 opacity-60 group-hover:opacity-100" />
         </button>
+
         <div className="px-5 py-2.5 bg-brand-primary/5 rounded-2xl border border-brand-primary/10 flex items-center gap-3 shadow-sm hover:shadow-md transition-all">
           <span className="text-xl">🛡️</span>
-          <span className="text-sm font-black text-brand-primary tracking-tight">{verifiedChapters.length} Verified Masteries</span>
+          <span className="text-sm font-black text-brand-primary tracking-tight">{verifiedChapters?.length || 0} Verified</span>
         </div>
       </div>
 
@@ -91,8 +141,8 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           <div className="w-14 h-14 rounded-xl bg-brand-secondary/10 flex items-center justify-center mb-6">
              <HelpCircle className="w-7 h-7 text-brand-secondary" />
           </div>
-          <h3 className="text-2xl font-bold text-gray-900 mb-2">Ask a Doubt</h3>
-          <p className="text-gray-500 font-medium">Stuck? Chat instantly with Vikram Sir to clear concepts.</p>
+          <h3 className="text-2xl font-bold text-gray-900 mb-2">{t('ask_vikram') || 'Ask a Doubt'}</h3>
+          <p className="text-gray-500 font-medium">{t('ask_desc') || 'Stuck? Chat instantly with Vikram Sir to clear concepts.'}</p>
         </motion.button>
 
         <motion.button 
@@ -102,13 +152,18 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               const area = weakAreas[0];
               let foundSubject = 'Mathematics';
               for (const s of SUBJECTS.map(sub => sub.id)) {
-                const chaps = getChapters(selectedBoard, selectedGrade || 10, s);
+                const chaps = safeGetChapters(s);
                 if (chaps.includes(area)) { foundSubject = s; break; }
               }
               onSetActiveSubject(foundSubject);
               onSetActiveChapter(area);
               onSetLessonPhase('practice');
-              onSetQuizQuestions(getQuestionsForChapter(area, 5, weakAreas));
+              
+              const questions = isOnline 
+                ? getQuestionsForChapter(area, 5, weakAreas)
+                : getOfflineQuestions(area, 5);
+                
+              onSetQuizQuestions(questions);
               onSetView('session');
             } else {
               onSetView('subject');
@@ -120,9 +175,9 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           <div className="w-14 h-14 rounded-xl bg-brand-primary/10 flex items-center justify-center mb-6">
              <FileText className="w-7 h-7 text-brand-primary" />
           </div>
-          <h3 className="text-2xl font-bold text-gray-900 mb-2">Practice Questions</h3>
+          <h3 className="text-2xl font-bold text-gray-900 mb-2">{t('practice') || 'Practice Questions'}</h3>
           <p className="text-gray-500 font-medium">
-            {weakAreas.length > 0 ? `Improve in ${weakAreas[0]} and more.` : 'Adaptive tests based on your weak areas.'}
+            {weakAreas.length > 0 ? `Improve in ${weakAreas[0]} and more.` : t('practice_desc') || 'Adaptive tests based on your weak areas.'}
           </p>
         </motion.button>
 
@@ -135,8 +190,8 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             <div className="w-12 h-12 rounded-xl bg-gray-100 flex items-center justify-center mb-6">
                <BarChart className="w-6 h-6 text-gray-600" />
             </div>
-            <h3 className="text-xl font-bold text-gray-800 mb-1">My Progress</h3>
-            <p className="text-sm text-gray-500">Track your weak areas.</p>
+            <h3 className="text-xl font-bold text-gray-800 mb-1">{t('my_progress') || 'My Progress'}</h3>
+            <p className="text-sm text-gray-500">{t('track_desc') || 'Track your weak areas.'}</p>
           </div>
           
           <div className="mt-4 bg-gray-50 rounded-lg p-3 text-sm text-gray-600 font-semibold border border-gray-100">
@@ -146,7 +201,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
       </div>
 
       {/* Recent Achievements & Activity Feed */}
-      {recentActivity.length > 0 && (
+      {recentActivity?.length > 0 && (
         <div className="mt-12 bg-white rounded-[32px] p-8 border border-gray-100 shadow-sm overflow-hidden">
           <div className="flex items-center gap-2 mb-6">
             <div className="w-8 h-8 rounded-lg bg-brand-primary/10 flex items-center justify-center">
