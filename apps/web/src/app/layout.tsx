@@ -37,7 +37,7 @@ export const metadata: Metadata = {
   },
   description: "The intelligent AI classroom designed for Indian education boards (CBSE, State Boards). Multi-agent pedagogical support in regional languages.",
   manifest: "/manifest.json",
-  themeColor: "#38bdf8",
+  themeColor: "#4f46e5",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
