@@ -18,7 +18,7 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useCurriculumStore } from '@/lib/store/curriculum';
-import { getTranslation, getSovereignContent, SovereignContent } from '@prathamone/db/curriculum';
+import { getTranslation, getSovereignContent, SovereignContent, getMSBSHSE10Content, DeepSovereignContent } from '@prathamone/db/curriculum';
 import { BoardPracticeOverlay } from '../BoardPracticeOverlay';
 
 interface StaticLessonViewProps {
@@ -38,7 +38,7 @@ export const StaticLessonView: React.FC<StaticLessonViewProps> = ({
   remediationPlan,
   onSetView
 }) => {
-  const { selectedBoard, selectedGrade, selectedLanguage } = useCurriculumStore();
+  const { selectedLanguage, selectedBoard, selectedGrade } = useCurriculumStore();
   const t = (key: string) => getTranslation(selectedLanguage, key);
 
   const [showSolution, setShowSolution] = React.useState(false);
@@ -46,7 +46,17 @@ export const StaticLessonView: React.FC<StaticLessonViewProps> = ({
   
   // Resolve Pedagogical Content
   const chapterId = activeChapter?.toLowerCase().replace(/^\d+\.\s*/, '').replace(/\s+/g, '_') || '';
-  const content = getSovereignContent(chapterId);
+  
+  // Priority 1: Check for Deep Content (Grade 10 MSBSHSE specifically built)
+  let content: DeepSovereignContent | SovereignContent | null = null;
+  if (selectedBoard === 'MSBSHSE' && selectedGrade === 10) {
+    content = getMSBSHSE10Content(chapterId);
+  }
+  
+  // Priority 2: Standard Sovereign Fallback
+  if (!content) {
+    content = getSovereignContent(chapterId);
+  }
 
   // Subject-Aware Content Selection
   const isMath = activeSubject?.toLowerCase().includes('math');
@@ -95,20 +105,44 @@ export const StaticLessonView: React.FC<StaticLessonViewProps> = ({
                  <span className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl">🧠</span>
                  <h2 className="text-2xl font-black text-gray-900">{t('concept_mastery') || 'Concept Mastery'}</h2>
                </div>
-               <div className="prose prose-lg text-gray-600 font-medium max-w-none">
+                <div className="prose prose-lg text-gray-700 font-medium max-w-none">
                   {content ? (
                     <>
-                      <p>{content.microConcept}</p>
-                      <div className="my-8 p-6 bg-slate-900 text-brand-success font-mono text-center rounded-2xl shadow-inner text-lg font-bold overflow-x-auto">
+                      {/* Deep Theoretical Enrichment */}
+                      {('detailedTheory' in content) && (content.detailedTheory.length > 0) ? (
+                        <div className="space-y-6 mb-8 text-justify leading-relaxed">
+                          {content.detailedTheory.map((para, i) => {
+                            // Simple bolding parser for offline markdown feel
+                            const parts = para.split(/(\*\*.*?\*\*)/g);
+                            return (
+                              <p key={i}>
+                                {parts.map((p, j) => 
+                                  p.startsWith('**') && p.endsWith('**') ? 
+                                  <strong key={j} className="text-gray-900 font-black">{p.slice(2, -2)}</strong> : p
+                                )}
+                              </p>
+                            );
+                          })}
+                        </div>
+                      ) : (
+                        <p>{content.microConcept}</p>
+                      )}
+
+                      <div className="my-8 p-6 bg-slate-900 border-l-4 border-brand-primary text-brand-success font-mono text-center rounded-2xl shadow-inner text-xl tracking-wider font-bold overflow-x-auto">
                         {content.visualization}
                       </div>
-                      <ul className="space-y-3 mt-6">
-                        {content.pillars.map((pillar, i) => (
-                           <li key={i} className="flex items-start gap-3">
-                             <span className="text-brand-primary">✦</span> {pillar}
-                           </li>
-                        ))}
-                      </ul>
+                      
+                      {/* Mastery Pillars */}
+                      <div className="mt-8 bg-brand-primary/5 rounded-2xl p-6 border border-brand-primary/10">
+                        <h4 className="text-sm font-black uppercase tracking-widest text-brand-primary mb-4">Core Principles</h4>
+                        <ul className="space-y-3">
+                          {content.pillars.map((pillar, i) => (
+                             <li key={i} className="flex items-start gap-4 text-gray-800 font-semibold text-base">
+                               <div className="mt-1 w-2 h-2 rounded-full bg-brand-secondary shrink-0" /> {pillar}
+                             </li>
+                          ))}
+                        </ul>
+                      </div>
                     </>
                   ) : (
                     <>
