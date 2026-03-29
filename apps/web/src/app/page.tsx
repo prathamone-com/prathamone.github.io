@@ -231,9 +231,9 @@ export default function LandingPage() {
           </PrathamButton>
         </motion.div>
 
-        {/* 🏛️ Traditional Defined Global Footer - FULLWIDTH */}
-        <footer className="mt-28 bg-brand-primary text-white py-16 w-full">
-          <div className="w-full px-6 md:px-12 lg:px-24">
+        {/* 🏛️ Traditional Defined Global Footer - ABSOLUTE FULLWIDTH */}
+        <footer className="mt-28 bg-brand-primary text-white py-16 w-full -mx-4 md:-mx-8 lg:-mx-12 px-4 md:px-8 lg:px-24">
+          <div className="w-full">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16 items-start">
               {/* BRAND SECTION */}
               <div className="space-y-6">
@@ -269,15 +269,15 @@ export default function LandingPage() {
               </div>
             </div>
 
-            {/* LEGAL & ATTRIBUTION SECTION - MINIMALIST & SMALLER */}
+            {/* LEGAL & ATTRIBUTION SECTION - ABSOLUTELY SIMPLE & SMALLEST */}
             <div className="mb-12 border-t border-white/5 pt-12">
-              <p className="text-xs text-indigo-100/40 leading-relaxed font-medium">
+              <p className="text-[10px] text-indigo-100/30 leading-relaxed font-normal">
                 Syllabus artifacts provided under the Open Access Policy of the eBalbharati Bureau, Pune.
               </p>
             </div>
 
             {/* FINAL COPYRIGHT BAR */}
-            <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6 text-[11px] font-bold uppercase tracking-[0.2em] text-indigo-200/30">
+            <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6 text-[11px] font-bold uppercase tracking-[0.2em] text-indigo-200/20">
               <div className="flex items-center gap-2">
                 <span>© {new Date().getFullYear()} Prathamone Platform</span>
               </div>
