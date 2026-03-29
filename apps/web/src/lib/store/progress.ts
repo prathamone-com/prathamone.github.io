@@ -17,8 +17,9 @@
  */
 
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { persist, createJSONStorage } from 'zustand/middleware';
 import { createClient } from '@/lib/supabase/client';
+import { indexedDBStorage } from '@/lib/utils/storage';
 
 // ==================== Types ====================
 
@@ -107,6 +108,11 @@ export interface ProgressState {
   verifiedChapters: string[];
   activeBounties: { id: string; chapterId: string; amount: number; creator: string; expiresAt: string }[];
   unlockedItems: string[];
+  
+  // Sync Status
+  isSyncing: boolean;
+  lastSyncedAt: string | null;
+  syncError: string | null;
 
   // Actions
   setStudentName: (name: string) => void;
@@ -179,6 +185,9 @@ export const useProgressStore = create<ProgressState>()(
       verifiedChapters: [],
       activeBounties: [],
       unlockedItems: [],
+      isSyncing: false,
+      lastSyncedAt: null,
+      syncError: null,
 
       setStudentName: (name) => set({ studentName: name }),
 
@@ -447,6 +456,15 @@ export const useProgressStore = create<ProgressState>()(
              return;
           }
 
+          // Conflict Resolution: Only sync if cloud data is newer than local (or if local is empty)
+          const localLastSync = get().lastSyncedAt;
+          const cloudLastSync = data.last_sync;
+
+          if (localLastSync && cloudLastSync && new Date(localLastSync) > new Date(cloudLastSync)) {
+             console.log("Sovereign Sync: Local progress is more recent. Skipping cloud restore.");
+             return;
+          }
+
           set({
              studentName: data.studentName,
              coins: data.coins,
@@ -454,7 +472,8 @@ export const useProgressStore = create<ProgressState>()(
              completedChapters: data.completedChapters || [],
              recentActivity: data.recentActivity || [],
              unlockedItems: data.unlockedItems || [],
-             activeBounties: data.activeBounties || []
+             activeBounties: data.activeBounties || [],
+             lastSyncedAt: data.last_sync
           });
 
         } catch (e) {
@@ -473,6 +492,8 @@ export const useProgressStore = create<ProgressState>()(
             return;
           }
 
+          set({ isSyncing: true, syncError: null });
+
           const { error } = await supabase
             .from('Sovereign_Profiles')
             .upsert({
@@ -489,18 +510,23 @@ export const useProgressStore = create<ProgressState>()(
 
           if (error) {
             // Handle missing table gracefully with actionable guidance
-            if (error.code === '42P01' || (typeof error.status === 'number' && error.status === 404)) {
-               console.error("SOVEREIGN SYNC ERROR: Table 'Sovereign_Profiles' is missing in Supabase.");
-               console.warn("ACTION REQUIRED: Please run the SQL schema migration found in /apps/web/supabase/migrations/20260329_sovereign_profiles.sql inside your Supabase SQL Editor.");
+            if (error.code === '42P01') {
+               const msg = "SOVEREIGN SYNC ERROR: Table 'Sovereign_Profiles' is missing.";
+               console.error(msg);
+               set({ syncError: 'Table missing in Supabase' });
             } else {
+               set({ syncError: error.message });
                throw error;
             }
           } else {
             console.log("Sovereign Sync Successful: Scholar state backed up to cloud.");
+            set({ lastSyncedAt: new Date().toISOString(), syncError: null });
           }
 
         } catch (e: any) {
           console.error("Sovereign Sync Failed:", e.message || e);
+        } finally {
+          set({ isSyncing: false });
         }
       },
 
@@ -519,6 +545,7 @@ export const useProgressStore = create<ProgressState>()(
     }),
     {
       name: 'prathamone-progress-storage',
+      storage: createJSONStorage(() => indexedDBStorage),
     }
   )
 );

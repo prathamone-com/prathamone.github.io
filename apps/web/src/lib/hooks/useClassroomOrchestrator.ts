@@ -16,7 +16,7 @@
 import { useState, useEffect } from 'react';
 import { useCurriculumStore } from '@/lib/store/curriculum';
 import { useOnlineStatus } from '@/lib/hooks/useOnlineStatus';
-import { getTopicsForChapter, getTranslation } from '@prathamone/db/curriculum';
+import { getChapters, getTopicsForChapter, getTranslation } from '@prathamone/db/curriculum';
 import { getOfflineRemediation } from '../utils/curriculum-offline';
 
 export type ClassroomView = 'dashboard' | 'subject' | 'topic' | 'session' | 'static_lesson' | 'shop';
@@ -54,22 +54,32 @@ export function useClassroomOrchestrator() {
   useEffect(() => {
     if (activeChapter && selectedBoard && selectedGrade) {
       setTopicsLoading(true);
-      
-      // Use deterministic local topics directly to support static export (GitHub Pages)
-      // This eliminates the need for dynamic API routes and ensures instant loading.
       const topics = getTopicsForChapter(
         selectedBoard, 
         selectedGrade, 
         activeSubject || 'Mathematics', 
         activeChapter
       );
-      
       setLiveTopics(topics || []);
       setTopicsLoading(false);
     } else {
       setLiveTopics([]);
     }
   }, [activeChapter, selectedBoard, selectedGrade, activeSubject]);
+
+  // 3.5 Sovereign Prefetching (Hardening)
+  useEffect(() => {
+    if (isOnline && activeSubject && selectedBoard && selectedGrade) {
+      console.log(`Sovereign Sync: Prefetching curriculum for ${activeSubject}...`);
+      const chapters = getChapters(selectedBoard, selectedGrade, activeSubject);
+      if (chapters) {
+        // "Touch" each chapter's topics to ensure they are parsed and ready in memory/cache
+        chapters.slice(0, 5).forEach(chapter => {
+           getTopicsForChapter(selectedBoard, selectedGrade, activeSubject, chapter);
+        });
+      }
+    }
+  }, [activeSubject, isOnline, selectedBoard, selectedGrade]);
 
   // 4. Remediation Logic
   useEffect(() => {

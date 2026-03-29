@@ -17,12 +17,14 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { BookOpen, HelpCircle, FileText, BarChart, Globe } from 'lucide-react';
+import { 
+  BookOpen, HelpCircle, FileText, BarChart, Globe, 
+  RefreshCw, CheckCircle, ShoppingBag 
+} from 'lucide-react';
 import { useProgressStore } from '@/lib/store/progress';
 import { useCurriculumStore } from '@/lib/store/curriculum';
 import { SUBJECTS, getChapters, getQuestionsForChapter, getTranslation, LANGUAGES } from '@prathamone/db/curriculum';
 import { useRouter } from 'next/navigation';
-import { ShoppingBag } from 'lucide-react';
 import { getSovereignCurriculum, getOfflineQuestions } from '@/lib/utils/curriculum-offline';
 
 interface DashboardViewProps {
@@ -47,7 +49,10 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 }) => {
   const router = useRouter();
   const { selectedLanguage, setLanguage, selectedBoard, selectedGrade } = useCurriculumStore();
-  const { currentStreak, completedChapters, weakAreas, recentActivity, coins, verifiedChapters } = useProgressStore();
+  const { 
+    currentStreak, completedChapters, weakAreas, recentActivity, 
+    coins, verifiedChapters, syncOfflineProgress, isSyncing, lastSyncedAt 
+  } = useProgressStore();
   
   const t = (key: string) => getTranslation(selectedLanguage, key);
 
@@ -115,6 +120,33 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           <span className="text-xl">🛡️</span>
           <span className="text-sm font-black text-brand-primary tracking-tight">{verifiedChapters?.length || 0} Verified</span>
         </div>
+
+        {/* Manual Sync Trigger */}
+        <button 
+          onClick={() => syncOfflineProgress('scholar_1')}
+          disabled={!isOnline || isSyncing}
+          className={`px-5 py-2.5 rounded-2xl border flex items-center gap-3 shadow-sm transition-all ${
+            isSyncing 
+              ? 'bg-blue-50 border-blue-100 text-blue-600' 
+              : isOnline 
+                ? 'bg-white border-gray-100 text-gray-600 hover:border-brand-primary hover:text-brand-primary'
+                : 'bg-gray-50 border-gray-100 text-gray-300 cursor-not-allowed'
+          }`}
+        >
+          {isSyncing ? (
+            <RefreshCw className="w-4 h-4 animate-spin" />
+          ) : (
+            <CheckCircle className={`w-4 h-4 ${isOnline ? 'text-brand-success' : 'text-gray-300'}`} />
+          )}
+          <div className="flex flex-col items-start leading-none">
+            <span className="text-[10px] font-black uppercase tracking-widest">
+              {isSyncing ? 'Syncing...' : 'Cloud Sync'}
+            </span>
+            {lastSyncedAt && !isSyncing && (
+                <span className="text-[8px] font-bold text-gray-400 mt-1 uppercase">Ready</span>
+            )}
+          </div>
+        </button>
       </div>
 
       {/* Epic 4-Card Action Grid */}
