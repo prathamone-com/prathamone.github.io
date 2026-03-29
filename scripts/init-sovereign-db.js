@@ -3,8 +3,12 @@
  * Usage: node scripts/init-sovereign-db.js [DATABASE_URL]
  */
 
+// Bypass SSL certificate validation for one-off deployment
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+
 const { Client } = require('pg');
 const fs = require('fs');
+
 const path = require('path');
 
 async function main() {
