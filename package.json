@@ -10,8 +10,11 @@
   },
   "devDependencies": {
     "turbo": "latest",
-    "prettier": "^3.0.0"
+    "prettier": "^3.0.0",
+    "pg": "^8.11.0",
+    "@types/pg": "^8.10.0"
   },
+
   "engines": {
     "node": ">=18"
   },
