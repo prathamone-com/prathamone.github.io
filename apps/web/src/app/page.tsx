@@ -247,6 +247,28 @@ export default function LandingPage() {
           </div>
           <p>© 2026 PrathamOne AI. Supporting NEP 2020 Guidelines.</p>
         </motion.footer>
+        {/* Footer section with legal and branding attribution */}
+        <footer className="mt-20 py-12 border-t border-slate-100 bg-slate-50/50">
+          <div className="max-w-4xl mx-auto px-6 text-center">
+            <div className="flex flex-wrap justify-center items-center gap-x-6 gap-y-2 text-slate-600 font-medium mb-4">
+              <span>© {new Date().getFullYear()} Prathamone</span>
+              <span className="hidden md:inline h-1 w-1 bg-slate-300 rounded-full" />
+              <span>Powered & Managed by <a href="https://aitdl.com" className="text-brand-primary hover:underline transition-all">AITDL NETWORK</a></span>
+            </div>
+            
+            <div className="flex justify-center items-center gap-6 text-sm text-brand-primary font-bold mb-8">
+              <a href="https://aitdl.com" target="_blank" rel="noopener noreferrer" className="hover:opacity-75 transition-opacity">aitdl.com</a>
+              <span className="w-1.5 h-1.5 bg-brand-secondary rounded-full" />
+              <a href="https://prathamone.com" target="_blank" rel="noopener noreferrer" className="hover:opacity-75 transition-opacity">prathamone.com</a>
+            </div>
+
+            <div className="p-4 bg-white/50 rounded-xl border border-slate-200 inline-block max-w-2xl">
+              <p className="text-xs text-slate-500 leading-relaxed font-medium">
+                Syllabus artifacts provided under the Open Access Policy of the eBalbharati Bureau, Pune.
+              </p>
+            </div>
+          </div>
+        </footer>
       </motion.div>
     </div>
   );
