@@ -199,11 +199,12 @@ export const SessionView: React.FC<SessionViewProps> = ({
           <div className="flex items-center gap-2">
             <button 
                onClick={onToggleMock}
-               className={`px-3 py-1.5 text-xs font-bold uppercase tracking-wider rounded-lg h-8 transition-colors ${
-                 useMock ? 'bg-orange-100 text-orange-600 border border-orange-200' : 'bg-gray-100 text-gray-500'
+               className={`px-4 py-1.5 text-[10px] font-black uppercase tracking-widest rounded-full h-8 transition-all flex items-center gap-2 ${
+                 useMock ? 'bg-amber-100 text-amber-700 border border-amber-200 shadow-sm' : 'bg-green-50 text-green-600 border border-green-200'
                }`}
             >
-               {useMock ? 'Mock AI' : 'Real AI'}
+               <span className="text-sm">{useMock ? '🛡️' : '☁️'}</span>
+               {useMock ? 'Sovereign Mode' : 'Cloud Online'}
             </button>
           </div>
         </div>

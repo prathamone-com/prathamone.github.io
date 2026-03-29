@@ -64,14 +64,13 @@ export const ClassroomHeader: React.FC<ClassroomHeaderProps> = ({
         <div className="hidden md:flex items-center gap-4">
            <button
              onClick={onToggleMock}
-             disabled={!isOnline}
-             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-bold transition-all ${
-               !isOnline ? 'bg-gray-100 text-gray-400 border-gray-200 opacity-50' :
-               useMock ? 'bg-yellow-50 text-yellow-600 border-yellow-200' : 'bg-green-50 text-green-600 border-green-200 shadow-sm'
+             className={`flex items-center gap-2 px-4 py-1.5 rounded-full border text-xs font-black uppercase tracking-widest transition-all ${
+               !isOnline ? 'bg-amber-100 text-amber-700 border-amber-200' :
+               useMock ? 'bg-blue-50 text-blue-600 border-blue-200 shadow-sm' : 'bg-emerald-50 text-emerald-600 border-emerald-200 shadow-sm'
              }`}
            >
-              <span className="text-sm">{!isOnline ? '🚫' : useMock ? '🧪' : '⚡'}</span>
-              {useMock ? 'Mock API' : 'Live AI'}
+              <span className="text-sm">{!isOnline ? '📴' : useMock ? '🛡️' : '☁️'}</span>
+              {!isOnline ? 'Sovereign Mode' : useMock ? 'Sovereign (Offline)' : 'Public Cloud (Online)'}
            </button>
            <LanguageSwitcher />
         </div>
