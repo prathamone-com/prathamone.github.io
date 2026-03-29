@@ -438,7 +438,7 @@ export const useProgressStore = create<ProgressState>()(
             .from('Sovereign_Profiles')
             .select('*')
             .eq('id', profileId)
-            .single();
+            .maybeSingle();
 
           if (error) {
              // Handle 42P01 (Undefined Table) specifically

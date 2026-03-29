@@ -64,7 +64,15 @@ export const OfflineBanner: React.FC<OfflineBannerProps> = ({ isOnline, message 
             animate={{ opacity: 1 }}
             className="absolute top-2 right-4 flex items-center gap-3 bg-white/80 backdrop-blur-md px-3 py-1.5 rounded-full border border-gray-100 shadow-sm transition-all hover:bg-white"
           >
-            {isSyncing ? (
+            {syncError ? (
+              <button 
+                onClick={() => syncOfflineProgress('scholar_1')}
+                className="flex items-center gap-2 text-red-500 hover:text-red-600 transition-colors"
+              >
+                <AlertTriangle className="w-3 h-3" />
+                <span className="text-[9px] font-black uppercase tracking-tighter">Sync Failed - Retry?</span>
+              </button>
+            ) : isSyncing ? (
               <>
                 <RefreshCcw className="w-3 h-3 text-brand-primary animate-spin" />
                 <span className="text-[10px] font-bold text-gray-500 uppercase tracking-tighter">Syncing...</span>

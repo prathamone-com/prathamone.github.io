@@ -13,6 +13,7 @@
  * ==========================================================
  */
 import math12Maha from './maharashtra_12_math.json';
+import { getSovereignChapters, SovereignChapter } from './sovereign';
 
 export interface Subject {
   id: string;
@@ -60,6 +61,9 @@ export const CURRICULUM_DATA: Record<string, Record<number, Record<string, strin
         '8. Heredity and Evolution',
         '9. Light – Reflection and Refraction',
         '10. The Human Eye and the Colourful World',
+        '11. Electricity',
+        '12. Magnetic Effects of Electric Current',
+        '13. Our Environment'
       ],
       'English': [
         '1. A Letter to God',
@@ -68,14 +72,29 @@ export const CURRICULUM_DATA: Record<string, Record<number, Record<string, strin
         '4. From the Diary of Anne Frank',
         '5. Glimpses of India',
         '6. Madam Rides the Bus',
+        '7. The Sermon at Benares',
+        '8. The Proposal',
+        '9. A Triumph of Surgery',
+        '10. The Thief Story'
       ],
       'Social Science': [
         '1. The Rise of Nationalism in Europe',
         '2. Nationalism in India',
         '3. The Making of a Global World',
-        '4. Resources and Development',
-        '5. Power Sharing',
-        '6. Federalism',
+        '4. The Age of Industrialisation',
+        '5. Print Culture and the Modern World',
+        '6. Resources and Development',
+        '7. Forest and Wildlife Resources',
+        '8. Water Resources',
+        '9. Agriculture',
+        '10. Minerals and Energy Resources',
+        '11. Power Sharing',
+        '12. Federalism',
+        '13. Gender, Religion and Caste',
+        '14. Political Parties',
+        '15. Outcomes of Democracy',
+        '16. Development',
+        '17. Sectors of the Indian Economy'
       ]
     },
     12: {
@@ -124,7 +143,33 @@ export const CURRICULUM_DATA: Record<string, Record<number, Record<string, strin
         '10. Space Missions',
         '11. Heredity and Evolution',
         '12. Life Processes in Living Organisms Part 1',
-        '13. Life Processes in Living Organisms Part 2'
+        '13. Life Processes in Living Organisms Part 2',
+        '14. Environmental Management',
+        '15. Towards Green Energy',
+        '16. Animal Classification',
+        '17. Introduction to Microbiology',
+        '18. Cell Biology and Biotechnology',
+        '19. Social Health',
+        '20. Disaster Management'
+      ],
+      'Social Science': [
+        '1. Historiography - Development in the West',
+        '2. Historiography - Indian Tradition',
+        '3. Applied History',
+        '4. History of Indian Arts',
+        '5. Mass Media and History',
+        '6. Entertainment and History',
+        '7. Sports and History',
+        '8. Tourism and History',
+        '9. Heritage Management',
+        '10. Field Visit',
+        '11. Location and Extent',
+        '12. Physiography and Drainage',
+        '13. Climate',
+        '14. Natural Vegetation and Wildlife',
+        '15. Population',
+        '16. Human Settlements',
+        '17. Economy and Occupations'
       ]
     },
     12: {
@@ -156,12 +201,73 @@ export const CURRICULUM_DATA: Record<string, Record<number, Record<string, strin
         '8. Electrostatics'
       ]
     }
+  },
+  'GSEB': {
+    10: {
+      'Mathematics': [
+        '1. Real Numbers',
+        '2. Polynomials',
+        '3. Pair of Linear Equations',
+        '4. Quadratic Equations',
+        '5. Arithmetic Progressions',
+        '6. Triangles',
+        '7. Coordinate Geometry',
+        '8. Introduction to Trigonometry',
+        '9. Some Applications of Trigonometry',
+        '10. Circles',
+        '11. Constructions',
+        '12. Areas Related to Circles',
+        '13. Surface Areas and Volumes',
+        '14. Statistics',
+        '15. Probability'
+      ],
+      'Science': [
+        '1. Chemical Reactions and Equations',
+        '2. Acids, Bases and Salts',
+        '3. Metals and Non-metals',
+        '4. Carbon and its Compounds',
+        '5. Periodic Classification of Elements',
+        '6. Life Processes',
+        '7. Control and Coordination',
+        '8. How do Organisms Reproduce?',
+        '9. Heredity and Evolution',
+        '10. Light – Reflection and Refraction',
+        '11. The Human Eye and the Colourful World',
+        '12. Electricity',
+        '13. Magnetic Effects of Electric Current',
+        '14. Sources of Energy',
+        '15. Our Environment',
+        '16. Management of Natural Resources'
+      ],
+      'Social Science': [
+        '1. Heritage of India',
+        '2. Cultural Heritage of India: Traditional Fine Arts',
+        '3. Cultural Heritage of India: Sculpture and Architecture',
+        '4. Literary Heritage of India',
+        '5. India’s Heritage of Science and Technology',
+        '6. Places of Indian Cultural Heritage',
+        '7. Natural Resources',
+        '8. Forest and Wildlife Resources',
+        '9. Agriculture',
+        '10. Water Resources',
+        '11. Mining and Minerals',
+        '12. Manufacturing Industries',
+        '13. Transport, Communication and Trade',
+        '14. Economic Development',
+        '15. Economic Liberalization and Globalization'
+      ]
+    }
   }
 };
 
 // Fallback logic helper
 export function getChapters(board: string, grade: number, subject: string): string[] {
-  return CURRICULUM_DATA[board]?.[grade]?.[subject] || CURRICULUM_DATA['CBSE'][10][subject] || [];
+  const chapters = CURRICULUM_DATA[board]?.[grade]?.[subject] || CURRICULUM_DATA['CBSE']?.[grade]?.[subject] || [];
+  if (chapters.length > 0) return chapters;
+  
+  // Final fallback to the Sovereign Registry if statics are empty
+  const sovereign = getSovereignChapters(board, subject, grade);
+  return sovereign.map((c: SovereignChapter) => c.title);
 }
 
 /**

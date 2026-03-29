@@ -1,4 +1,4 @@
-﻿/**
+/**
  * ==========================================================
  * AITDL AI AGENT BUILD SIGNATURE
  * ==========================================================
@@ -21,4 +21,4 @@ export * from './languages'
 export * from './translations'
 export * from './mastery'
 export * from './questions'
-
+export * from './sovereign'

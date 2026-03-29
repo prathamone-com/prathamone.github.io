@@ -13,7 +13,7 @@
  * ==========================================================
  */
 
-import { getSovereignChapters } from './curriculum-sovereign';
+import { getSovereignChapters } from '@prathamone/db/curriculum';
 import { getSovereignQuestions } from './curriculum-questions-sovereign';
 import { getSovereignRemediation } from './curriculum-remediation-sovereign';
 
@@ -54,11 +54,8 @@ export function getOfflineContent(topic: string, phase: string, lang: string = '
  * Returns the full Sovereign curriculum for a specific board/subject
  */
 export function getSovereignCurriculum(boardId: string, subjectId: string): any[] {
-  // Currently handles Grade 10 Math only
-  if (subjectId.toLowerCase() === 'mathematics' || subjectId.toLowerCase() === 'maths') {
-    return getSovereignChapters(boardId, 'Mathematics', 10);
-  }
-  return [];
+  // Now returns any subject supported by the Sovereign Registry (Class 10)
+  return getSovereignChapters(boardId, subjectId, 10);
 }
 
 /**
