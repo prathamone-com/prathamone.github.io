@@ -11,6 +11,8 @@ const withPWA = require('next-pwa')({
 const nextConfig = {
   output: 'export',
   images: { unoptimized: true },
+  // Explicitly set empty turbopack config to silence the webpack plugin error in Next.js 16
+  turbopack: {},
   // Modern Next.js 15+ standard
   transpilePackages: ['@prathamone/ai', '@prathamone/db', '@prathamone/ui'],
   // Required for some LangChain server modules
