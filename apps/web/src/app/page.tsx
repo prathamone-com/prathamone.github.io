@@ -231,9 +231,9 @@ export default function LandingPage() {
           </PrathamButton>
         </motion.div>
 
-        {/* 🏛️ Traditional Defined Global Footer */}
-        <footer className="mt-28 bg-brand-primary text-white py-16">
-          <div className="max-w-6xl mx-auto px-6">
+        {/* 🏛️ Traditional Defined Global Footer - FULLWIDTH */}
+        <footer className="mt-28 bg-brand-primary text-white py-16 w-full">
+          <div className="w-full px-6 md:px-12 lg:px-24">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16 items-start">
               {/* BRAND SECTION */}
               <div className="space-y-6">
@@ -252,7 +252,7 @@ export default function LandingPage() {
               <div className="flex flex-col gap-4">
                 <h4 className="text-xs font-black uppercase tracking-[0.2em] text-brand-secondary mb-2">Navigation</h4>
                 <a href="https://aitdl.com" target="_blank" rel="noopener noreferrer" className="text-base font-semibold hover:text-brand-secondary transition-colors">aitdl.com</a>
-                <a href="https://prathamone.com" target="_blank" rel="noopener noreferrer" className="text-base font-semibold hover:text-brand-secondary transition-colors line-through decoration-brand-secondary/30">prathamone.com</a>
+                <a href="https://prathamone.com" target="_blank" rel="noopener noreferrer" className="text-base font-semibold hover:text-brand-secondary transition-colors">prathamone.com</a>
               </div>
 
               {/* MISSION SECTION */}
@@ -269,15 +269,15 @@ export default function LandingPage() {
               </div>
             </div>
 
-            {/* LEGAL & ATTRIBUTION SECTION - HIGH CONTRAST */}
-            <div className="bg-white/5 rounded-2xl p-8 border border-white/10 mb-12 text-center group hover:bg-white/10 transition-colors">
-              <p className="text-sm md:text-lg font-bold text-white uppercase tracking-tight">
+            {/* LEGAL & ATTRIBUTION SECTION - MINIMALIST & SMALLER */}
+            <div className="mb-12 border-t border-white/5 pt-12">
+              <p className="text-xs text-indigo-100/40 leading-relaxed font-medium">
                 Syllabus artifacts provided under the Open Access Policy of the eBalbharati Bureau, Pune.
               </p>
             </div>
 
             {/* FINAL COPYRIGHT BAR */}
-            <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6 text-[11px] font-bold uppercase tracking-[0.2em] text-indigo-200/40">
+            <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6 text-[11px] font-bold uppercase tracking-[0.2em] text-indigo-200/30">
               <div className="flex items-center gap-2">
                 <span>© {new Date().getFullYear()} Prathamone Platform</span>
               </div>
