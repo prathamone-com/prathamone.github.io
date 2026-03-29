@@ -18,8 +18,9 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  ArrowLeft, Mic, Send, Check, Trophy 
+  ArrowLeft, Mic, Send, Check, Trophy, AlertCircle, Zap
 } from 'lucide-react';
+
 import { useCurriculumStore } from '@/lib/store/curriculum';
 import { useProgressStore } from '@/lib/store/progress';
 import { PERSONAS } from '@prathamone/ai';
@@ -58,8 +59,9 @@ export const SessionView: React.FC<SessionViewProps> = ({
   const t = (key: string) => getTranslation(selectedLanguage, key);
 
   const { 
-    messages, isStreaming, currentTeacherId, activePersona, startStream, setMessages 
+    messages, isStreaming, currentTeacherId, activePersona, quotaExhausted, startStream, setMessages 
   } = useClassroomStream();
+
 
   const [quizQuestions, setQuizQuestions] = useState<any[]>([]);
   const [doubtInput, setDoubtInput] = useState('');
@@ -311,7 +313,36 @@ export const SessionView: React.FC<SessionViewProps> = ({
           <>
             <section className="flex-1 flex flex-col gap-4 min-w-0">
               <div className="relative flex-1 bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                <AnimatePresence>
+                  {quotaExhausted && (
+                    <motion.div 
+                      initial={{ y: -50, opacity: 0 }}
+                      animate={{ y: 0, opacity: 1 }}
+                      exit={{ y: -50, opacity: 0 }}
+                      className="absolute top-4 left-1/2 -translate-x-1/2 z-50 w-[90%] max-w-xl"
+                    >
+                      <div className="bg-white/80 backdrop-blur-xl border border-amber-200 rounded-[32px] p-4 shadow-2xl flex items-center gap-4">
+                        <div className="w-12 h-12 rounded-2xl bg-amber-100 flex items-center justify-center shrink-0">
+                          <AlertCircle className="w-6 h-6 text-amber-600" />
+                        </div>
+                        <div className="flex-1">
+                          <p className="text-[10px] font-black text-amber-600 uppercase tracking-widest mb-0.5">Cloud AI Limit Reached</p>
+                          <p className="text-xs text-gray-700 font-bold leading-tight">Pedagogy is now powered by the Sovereign Offline Scholar 🛡️.</p>
+                        </div>
+                        <button 
+                          onClick={() => onSetView('shop')}
+                          className="px-4 py-2.5 bg-brand-primary text-white rounded-2xl text-[10px] font-black uppercase tracking-widest flex items-center gap-2 shadow-lg shadow-brand-primary/20 hover:scale-105 active:scale-95 transition-all"
+                        >
+                          <Zap className="w-3 h-3 fill-current" />
+                          Recharge
+                        </button>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
                 <div className="absolute inset-0 z-0 overflow-y-auto">
+
                   {lessonPhase === 'practice' && quizQuestions.length > 0 ? (
                     <div className="p-6">
                       <QuizCard

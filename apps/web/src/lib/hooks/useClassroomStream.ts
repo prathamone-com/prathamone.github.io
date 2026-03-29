@@ -44,8 +44,10 @@ export function useClassroomStream() {
   const [currentTeacherId, setCurrentTeacherId] = useState<string | null>(null);
   const [activePersona, setActivePersona] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
+  const [quotaExhausted, setQuotaExhausted] = useState(false);
   
   const abortControllerRef = useRef<AbortController | null>(null);
+
   const localStreamIntervalRef = useRef<any>(null);
 
   const startLocalStream = useCallback((params: StreamParams, teacherId: string) => {
@@ -95,6 +97,7 @@ export function useClassroomStream() {
     
     setIsStreaming(true);
     setError(null);
+    setQuotaExhausted(false);
     setMessages([]); 
     setCurrentTeacherId(teacherId);
     setActivePersona(persona);
@@ -106,11 +109,13 @@ export function useClassroomStream() {
     // Sovereign (Offline) Trigger: Mock, Offline, or Missing API Key
     if (params.useMock || !isOnline || !hasApiKey) {
       if (!hasApiKey && isOnline && !params.useMock) {
+        setQuotaExhausted(true);
         console.warn('AI API Key missing. Launching Sovereign Offline Mode.');
       }
       startLocalStream(params, teacherId);
       return;
     }
+
 
 
     try {
@@ -157,11 +162,20 @@ export function useClassroomStream() {
 
     } catch (err: any) {
       if (err.name === 'AbortError') return;
+      
+      const isQuotaError = err.message?.includes('429') || err.message?.includes('quota') || err.message?.includes('exhausted');
+      const isAuthError = err.message?.includes('403') || err.message?.includes('401') || err.message?.includes('unauthorized');
+      
+      if (isQuotaError || isAuthError) {
+        setQuotaExhausted(true);
+      }
+
       setError(err.message || 'An unknown error occurred');
       console.error('Stream failure:', err);
       // Fail-over to Local Stream on API error
       startLocalStream(params, teacherId);
     } finally {
+
       setIsStreaming(false);
       setMessages(prev => prev.map(m => ({ ...m, isComplete: true })));
     }
@@ -180,10 +194,12 @@ export function useClassroomStream() {
     currentTeacherId,
     activePersona,
     error,
+    quotaExhausted,
     startStream,
     setMessages,
   };
 }
+
 
 
 
