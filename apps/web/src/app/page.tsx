@@ -232,52 +232,52 @@ export default function LandingPage() {
         </motion.div>
 
         {/* 🏛️ Absolute Full-width Global Footer breakout */}
-        <footer className="relative mt-28 bg-brand-primary text-white py-20 w-screen left-1/2 right-1/2 -ml-[50vw] -mr-[50vw]">
+        <footer className="relative mt-28 bg-brand-primary text-white py-16 w-screen left-1/2 right-1/2 -ml-[50vw] -mr-[50vw]">
           <div className="max-w-7xl mx-auto px-6 md:px-12">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-16 mb-20 items-start">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-16 mb-10 items-start">
               {/* BRAND SECTION */}
-              <div className="space-y-6">
+              <div className="space-y-4">
                 <div className="flex items-center gap-3">
-                  <div className="bg-white/10 p-2 rounded-xl border border-white/20">
-                    <img src="/logo-ganesha.png" alt="Logo" className="w-8 h-8 brightness-0 invert" />
+                  <div className="bg-white p-1.5 rounded-xl">
+                    <img src="/logo-ganesha.png" alt="Logo" className="w-8 h-8 object-contain shadow-sm" />
                   </div>
                   <span className="text-xl font-bold tracking-tight">PrathamOne Platform</span>
                 </div>
-                <p className="text-indigo-100/60 text-sm leading-relaxed max-w-xs font-medium">
+                <p className="text-indigo-100/60 text-xs leading-relaxed max-w-xs font-medium">
                   The intelligent AI classroom designed for Indian education boards. Empowering Bharat with pedagogical excellence.
                 </p>
               </div>
 
               {/* LINKS SECTION */}
-              <div className="flex flex-col gap-5">
-                <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-brand-secondary/80 mb-2">Navigation</h4>
+              <div className="flex flex-col gap-4">
+                <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-brand-secondary/80 mb-1">Navigation</h4>
                 <a href="https://aitdl.com" target="_blank" rel="noopener noreferrer" className="text-sm font-semibold hover:text-brand-secondary transition-all">aitdl.com</a>
                 <a href="https://prathamone.com" target="_blank" rel="noopener noreferrer" className="text-sm font-semibold hover:text-brand-secondary transition-all">prathamone.com</a>
               </div>
 
               {/* MISSION SECTION */}
-              <div className="flex flex-col gap-5">
-                <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-brand-secondary/80 mb-2">Pedagogy</h4>
+              <div className="flex flex-col gap-4">
+                <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-brand-secondary/80 mb-1">Pedagogy</h4>
                 <div className="flex items-center gap-3 text-sm text-indigo-100/70 font-medium">
-                  <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
+                  <div className="w-1.5 h-1.5 bg-brand-secondary rounded-full" />
                   NCERT Aligned Curriculum
                 </div>
                 <div className="flex items-center gap-3 text-sm text-indigo-100/70 font-medium">
-                  <div className="w-1.5 h-1.5 bg-sky-400 rounded-full shadow-[0_0_8px_rgba(56,189,248,0.5)]" />
+                  <div className="w-1.5 h-1.5 bg-white/20 rounded-full" />
                   Multi-Agent AI Classroom
                 </div>
               </div>
             </div>
 
-            {/* LEGAL ATTRIBUTION - ZERO FORMAT / MINIMALIST */}
-            <div className="mb-12 border-t border-white/5 pt-12">
-              <p className="text-[9px] text-white/20 leading-relaxed font-normal tracking-wide max-w-2xl italic">
+            {/* LEGAL ATTRIBUTION - ZERO FORMAT (SMALLER GAPS / NO LINES) */}
+            <div className="mb-8 pt-4">
+              <p className="text-[9px] text-white/30 leading-relaxed font-normal tracking-wide italic">
                 Syllabus artifacts provided under the Open Access Policy of the eBalbharati Bureau, Pune.
               </p>
             </div>
 
-            {/* FINAL COPYRIGHT BAR */}
-            <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6 text-[10px] font-bold uppercase tracking-[0.25em] text-white/10">
+            {/* FINAL COPYRIGHT BAR (NO LINES / TIGHTER) */}
+            <div className="pt-6 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] font-bold uppercase tracking-[0.25em] text-white/10">
               <div className="flex items-center gap-2">
                 <span>© {new Date().getFullYear()} Prathamone Platform</span>
               </div>
