@@ -16,30 +16,26 @@
  * ==========================================================
  */
 
-import type { NextConfig } from "next";
-const withPWA = require('next-pwa')({
+import withPWAInit from 'next-pwa';
+
+const withPWA = withPWAInit({
   dest: 'public',
   disable: process.env.NODE_ENV === 'development',
   register: true,
   skipWaiting: true,
 });
 
-const nextConfig: NextConfig = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   output: 'export',
   images: { unoptimized: true },
   // Silence Turbopack lockfile warning and force current workspace
-  turbopack: {
-    // Let Next.js know which root to use
-    // Using string path because process.cwd() might evaluate inconsistently in some bundlers
-    resolveAlias: {
-      '@': './src'
-    }
+  experimental: {
+    // Transpile workspace packages
+    transpilePackages: ['@prathamone/ai', '@prathamone/db', '@prathamone/ui'],
   },
-  // Transpile workspace packages
-  transpilePackages: ['@prathamone/ai', '@prathamone/db', '@prathamone/ui'],
   // Required for some LangChain server modules
   serverExternalPackages: ['@langchain/core', '@langchain/langgraph']
 };
 
 export default withPWA(nextConfig);
-

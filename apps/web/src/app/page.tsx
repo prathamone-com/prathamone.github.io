@@ -231,36 +231,59 @@ export default function LandingPage() {
           </PrathamButton>
         </motion.div>
 
-        {/* Unified Professional Footer */}
-        <footer className="mt-28 py-20 border-t border-slate-100 bg-white">
-          <div className="max-w-4xl mx-auto px-6 text-center text-slate-400">
-            {/* 1. Pedagogical Integrity (Mission Section) */}
-            <div className="flex flex-wrap justify-center items-center gap-x-8 gap-y-4 mb-16 text-[13px] font-semibold tracking-wide lowercase italic">
-              <span className="flex items-center gap-2"># ncert_aligned</span>
-              <span className="flex items-center gap-2"># ai_powered</span>
-              <span className="flex items-center gap-2"># built_for_bharat</span>
+        {/* 🏛️ Traditional Defined Global Footer */}
+        <footer className="mt-28 bg-brand-primary text-white py-16">
+          <div className="max-w-6xl mx-auto px-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16 items-start">
+              {/* BRAND SECTION */}
+              <div className="space-y-6">
+                <div className="flex items-center gap-3">
+                  <div className="bg-white/10 p-2 rounded-xl border border-white/20">
+                    <img src="/logo-ganesha.png" alt="Logo" className="w-8 h-8 brightness-0 invert" />
+                  </div>
+                  <span className="text-xl font-bold tracking-tight">PrathamOne Platform</span>
+                </div>
+                <p className="text-indigo-100/70 text-sm leading-relaxed max-w-xs">
+                  The intelligent AI classroom designed for Indian education boards. Empowering Bharat with pedagogical excellence.
+                </p>
+              </div>
+
+              {/* LINKS SECTION */}
+              <div className="flex flex-col gap-4">
+                <h4 className="text-xs font-black uppercase tracking-[0.2em] text-brand-secondary mb-2">Navigation</h4>
+                <a href="https://aitdl.com" target="_blank" rel="noopener noreferrer" className="text-base font-semibold hover:text-brand-secondary transition-colors">aitdl.com</a>
+                <a href="https://prathamone.com" target="_blank" rel="noopener noreferrer" className="text-base font-semibold hover:text-brand-secondary transition-colors line-through decoration-brand-secondary/30">prathamone.com</a>
+              </div>
+
+              {/* MISSION SECTION */}
+              <div className="flex flex-col gap-4">
+                <h4 className="text-xs font-black uppercase tracking-[0.2em] text-brand-secondary mb-2">Pedagogy</h4>
+                <div className="flex items-center gap-2 text-sm text-indigo-100/80">
+                  <div className="w-1.5 h-1.5 bg-emerald-400 rounded-full" />
+                  NCERT Aligned Curriculum
+                </div>
+                <div className="flex items-center gap-2 text-sm text-indigo-100/80">
+                  <div className="w-1.5 h-1.5 bg-sky-400 rounded-full" />
+                  Multi-Agent AI Classroom
+                </div>
+              </div>
             </div>
 
-            {/* 2. Official Accreditation (Legal Section) - PROMINENT */}
-            <div className="mb-16">
-              <p className="text-sm md:text-base text-slate-700 leading-relaxed font-bold max-w-3xl mx-auto">
+            {/* LEGAL & ATTRIBUTION SECTION - HIGH CONTRAST */}
+            <div className="bg-white/5 rounded-2xl p-8 border border-white/10 mb-12 text-center group hover:bg-white/10 transition-colors">
+              <p className="text-sm md:text-lg font-bold text-white uppercase tracking-tight">
                 Syllabus artifacts provided under the Open Access Policy of the eBalbharati Bureau, Pune.
               </p>
             </div>
 
-            {/* 3. Global Identity (Branding Section) - MINIMALIST */}
-            <div className="pt-12 border-t border-slate-50 opacity-80">
-              <div className="flex flex-col items-center gap-6">
-                <div className="flex flex-wrap justify-center items-center gap-x-6 gap-y-2 text-[10px] md:text-[11px] text-slate-500 font-black uppercase tracking-[0.25em]">
-                  <span>© {new Date().getFullYear()} Prathamone Platform</span>
-                  <span className="hidden md:inline h-1 w-1 bg-brand-secondary rounded-full" />
-                  <span>Managed by <a href="https://aitdl.com" target="_blank" rel="noopener noreferrer" className="text-brand-primary hover:underline">AITDL NETWORK</a></span>
-                </div>
-                
-                <div className="flex justify-center items-center gap-10 text-[11px] font-bold text-slate-300 tracking-widest uppercase">
-                  <a href="https://aitdl.com" target="_blank" rel="noopener noreferrer" className="hover:text-brand-primary transition-colors">aitdl.com</a>
-                  <a href="https://prathamone.com" target="_blank" rel="noopener noreferrer" className="hover:text-brand-primary transition-colors border-b border-slate-200">prathamone.com</a>
-                </div>
+            {/* FINAL COPYRIGHT BAR */}
+            <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6 text-[11px] font-bold uppercase tracking-[0.2em] text-indigo-200/40">
+              <div className="flex items-center gap-2">
+                <span>© {new Date().getFullYear()} Prathamone Platform</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <span className="hidden md:inline">•</span>
+                <span>Managed by <a href="https://aitdl.com" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">AITDL NETWORK</a></span>
               </div>
             </div>
           </div>

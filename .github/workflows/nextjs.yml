@@ -40,8 +40,10 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "24"
           cache: "pnpm"
+        env:
+          FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
@@ -51,7 +53,7 @@ jobs:
           #
           # You can substitute this step with your own custom (pre)build steps
           static_site_generator: next
-          generator_config_file: apps/web/next.config.ts
+          generator_config_file: apps/web/next.config.mjs
 
       - name: Restore cache
         uses: actions/cache@v4
