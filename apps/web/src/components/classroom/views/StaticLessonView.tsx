@@ -18,7 +18,8 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useCurriculumStore } from '@/lib/store/curriculum';
-import { getTranslation } from '@prathamone/db/curriculum';
+import { getTranslation, getSovereignContent, SovereignContent } from '@prathamone/db/curriculum';
+import { BoardPracticeOverlay } from '../BoardPracticeOverlay';
 
 interface StaticLessonViewProps {
   activeSubject: string | null;
@@ -41,6 +42,11 @@ export const StaticLessonView: React.FC<StaticLessonViewProps> = ({
   const t = (key: string) => getTranslation(selectedLanguage, key);
 
   const [showSolution, setShowSolution] = React.useState(false);
+  const [practiceTest, setPracticeTest] = React.useState<'easy' | 'medium' | 'hard' | null>(null);
+  
+  // Resolve Pedagogical Content
+  const chapterId = activeChapter?.toLowerCase().replace(/^\d+\.\s*/, '').replace(/\s+/g, '_') || '';
+  const content = getSovereignContent(chapterId);
 
   // Subject-Aware Content Selection
   const isMath = activeSubject?.toLowerCase().includes('math');
@@ -90,28 +96,46 @@ export const StaticLessonView: React.FC<StaticLessonViewProps> = ({
                  <h2 className="text-2xl font-black text-gray-900">{t('concept_mastery') || 'Concept Mastery'}</h2>
                </div>
                <div className="prose prose-lg text-gray-600 font-medium max-w-none">
-                 <p>{t('module_intro_prefix') || 'This module covers the advanced principles of'} <strong>{activeTopic?.title || activeChapter}</strong> {t('module_intro_suffix') || `mapped strictly to the ${selectedBoard} syllabus architecture.`}</p>
-                 
-                 {isMath ? (
-                   <div className="my-8 p-6 bg-slate-900 text-brand-success font-mono text-center rounded-2xl shadow-inner text-lg font-bold overflow-x-auto">
-                     f&apos;(x) = lim(h→0) [f(x+h) - f(x)] / h
-                   </div>
-                 ) : isScience ? (
-                    <div className="my-8 p-6 bg-slate-900 text-brand-success font-mono text-center rounded-2xl shadow-inner text-lg font-bold overflow-x-auto">
-                      PV = nRT (Ideal Gas Equation)
-                    </div>
-                 ) : (
-                    <div className="my-8 p-6 bg-slate-900 text-brand-success font-mono text-center rounded-2xl shadow-inner text-lg font-bold overflow-x-auto">
-                      &lt;Structural Logic Analysis /&gt;
-                    </div>
-                 )}
+                  {content ? (
+                    <>
+                      <p>{content.microConcept}</p>
+                      <div className="my-8 p-6 bg-slate-900 text-brand-success font-mono text-center rounded-2xl shadow-inner text-lg font-bold overflow-x-auto">
+                        {content.visualization}
+                      </div>
+                      <ul className="space-y-3 mt-6">
+                        {content.pillars.map((pillar, i) => (
+                           <li key={i} className="flex items-start gap-3">
+                             <span className="text-brand-primary">✦</span> {pillar}
+                           </li>
+                        ))}
+                      </ul>
+                    </>
+                  ) : (
+                    <>
+                      <p>{t('module_intro_prefix') || 'This module covers the advanced principles of'} <strong>{activeTopic?.title || activeChapter}</strong> {t('module_intro_suffix') || `mapped strictly to the ${selectedBoard} syllabus architecture.`}</p>
+                      
+                      {isMath ? (
+                        <div className="my-8 p-6 bg-slate-900 text-brand-success font-mono text-center rounded-2xl shadow-inner text-lg font-bold overflow-x-auto">
+                          f&apos;(x) = lim(h→0) [f(x+h) - f(x)] / h
+                        </div>
+                      ) : isScience ? (
+                         <div className="my-8 p-6 bg-slate-900 text-brand-success font-mono text-center rounded-2xl shadow-inner text-lg font-bold overflow-x-auto">
+                           PV = nRT (Ideal Gas Equation)
+                         </div>
+                      ) : (
+                         <div className="my-8 p-6 bg-slate-900 text-brand-success font-mono text-center rounded-2xl shadow-inner text-lg font-bold overflow-x-auto">
+                           &lt;Structural Logic Analysis /&gt;
+                         </div>
+                      )}
 
-                 <ul className="space-y-3 mt-6">
-                   <li className="flex items-start gap-3"><span className="text-brand-primary">✦</span> {t('pedagogy_step_1') || 'Identify core variables dynamically.'}</li>
-                   <li className="flex items-start gap-3"><span className="text-brand-primary">✦</span> {t('pedagogy_step_2') || 'Understand theorem constraints in boundary cases.'}</li>
-                   <li className="flex items-start gap-3"><span className="text-brand-primary">✦</span> {t('pedagogy_step_3') || 'Apply concepts across multi-dimensional planes.'}</li>
-                 </ul>
-               </div>
+                      <ul className="space-y-3 mt-6">
+                        <li className="flex items-start gap-3"><span className="text-brand-primary">✦</span> {t('pedagogy_step_1') || 'Identify core variables dynamically.'}</li>
+                        <li className="flex items-start gap-3"><span className="text-brand-primary">✦</span> {t('pedagogy_step_2') || 'Understand theorem constraints in boundary cases.'}</li>
+                        <li className="flex items-start gap-3"><span className="text-brand-primary">✦</span> {t('pedagogy_step_3') || 'Apply concepts across multi-dimensional planes.'}</li>
+                      </ul>
+                    </>
+                  )}
+                </div>
              </div>
 
              {/* HOTS Box */}
@@ -130,9 +154,11 @@ export const StaticLessonView: React.FC<StaticLessonViewProps> = ({
                  <div className="space-y-4">
                    <div className="p-6 bg-white rounded-2xl shadow-sm border border-indigo-50">
                      <p className="font-bold text-gray-800 mb-4 text-base">
-                       {isMath ? 'Q1. If a variable line passes through the point of intersection of L1 and L2, what locus does the centroid form?' 
-                       : isScience ? 'Q1. Explain why the rate of reaction doubles when the temperature increases by 10K according to Arrhenius theory?'
-                       : 'Q1. Analyze the structural impact of this concept on the overall syllabus framework.'}
+                       {content?.hots?.question || (
+                         isMath ? 'Q1. If a variable line passes through the point of intersection of L1 and L2, what locus does the centroid form?' 
+                         : isScience ? 'Q1. Explain why the rate of reaction doubles when the temperature increases by 10K according to Arrhenius theory?'
+                         : 'Q1. Analyze the structural impact of this concept on the overall syllabus framework.'
+                       )}
                      </p>
                      
                      <AnimatePresence>
@@ -143,8 +169,10 @@ export const StaticLessonView: React.FC<StaticLessonViewProps> = ({
                            className="pt-4 border-t border-indigo-50 text-indigo-700 text-sm font-medium leading-relaxed"
                          >
                            <p className="mb-2"><strong>{t('advanced_logic') || 'Advanced Logic'}:</strong></p>
-                           {isMath ? 'The locus forms an elliptical plane centered at the origin of the coordinate transformation.'
-                           : 'This is due to the exponential increase in collisions with energy greater than activation energy (Ea).'}
+                           {content?.hots?.answer || (
+                              isMath ? 'The locus forms an elliptical plane centered at the origin of the coordinate transformation.'
+                              : 'This is due to the exponential increase in collisions with energy greater than activation energy (Ea).'
+                           )}
                          </motion.div>
                        ) : (
                          <button 
@@ -244,13 +272,20 @@ export const StaticLessonView: React.FC<StaticLessonViewProps> = ({
                <p className="text-sm font-semibold text-gray-500 mb-6">{t('pyq_desc') || `Based on previous 5-year PYQs from ${selectedBoard} Grade ${selectedGrade || 10}.`}</p>
                
                <div className="space-y-3">
-                 {[1, 2, 3].map((num) => (
-                   <div key={num} className="flex items-center justify-between p-4 rounded-xl border border-gray-100 hover:border-brand-primary/30 hover:bg-brand-primary/5 cursor-pointer transition-all group">
-                     <span className="text-sm font-bold text-gray-700">{t('offline_test') || 'Offline Test'} {num} ({num === 1 ? 'Basic' : num === 2 ? 'Medium' : 'Advance'})</span>
-                     <span className="text-gray-400 group-hover:text-brand-primary group-hover:translate-x-1 transition-all">→</span>
-                   </div>
-                 ))}
-               </div>
+                  {[1, 2, 3].map((num) => {
+                    const difficulty = num === 1 ? 'easy' : num === 2 ? 'medium' : 'hard';
+                    return (
+                      <div 
+                        key={num} 
+                        onClick={() => setPracticeTest(difficulty)}
+                        className="flex items-center justify-between p-4 rounded-xl border border-gray-100 hover:border-brand-primary/30 hover:bg-brand-primary/5 cursor-pointer transition-all group"
+                      >
+                        <span className="text-sm font-bold text-gray-700">{t('offline_test') || 'Offline Test'} {num} ({num === 1 ? 'Basic' : num === 2 ? 'Medium' : 'Advance'})</span>
+                        <span className="text-gray-400 group-hover:text-brand-primary group-hover:translate-x-1 transition-all">→</span>
+                      </div>
+                    );
+                  })}
+                </div>
              </div>
 
              <div className="bg-slate-900 rounded-[32px] p-8 relative overflow-hidden group">
@@ -271,7 +306,18 @@ export const StaticLessonView: React.FC<StaticLessonViewProps> = ({
            </div>
          </div>
 
-      </motion.div>
+       </motion.div>
+
+       {/* Practice Modal */}
+       <AnimatePresence>
+         {practiceTest && (
+           <BoardPracticeOverlay 
+              chapter={activeChapter || 'Chapter'}
+              difficulty={practiceTest}
+              onClose={() => setPracticeTest(null)}
+           />
+         )}
+       </AnimatePresence>
     </div>
   );
 };
