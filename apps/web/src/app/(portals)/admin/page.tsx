@@ -86,7 +86,7 @@ export default function AdminDashboard() {
         {/* Support Card */}
         <div className="bg-brand-primary/5 p-6 rounded-[32px] border border-brand-primary/10">
           <p className="text-sm font-black text-brand-primary uppercase tracking-tight mb-2">Need Support?</p>
-          <p className="text-xs font-bold text-gray-500 leading-relaxed mb-4">Contact your PrathamOne platform manager.</p>
+          <p className="text-xs font-bold text-gray-500 leading-relaxed mb-4">Contact your PrathamOne Eduwork manager.</p>
           <PrathamButton variant="secondary" size="sm" className="w-full bg-white text-brand-primary border-none">Get Help</PrathamButton>
         </div>
       </nav>

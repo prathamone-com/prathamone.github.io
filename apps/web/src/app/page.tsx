@@ -241,7 +241,7 @@ export default function LandingPage() {
                   <div className="bg-white p-1.5 rounded-xl">
                     <img src="/logo-ganesha.png" alt="Logo" className="w-8 h-8 object-contain shadow-sm" />
                   </div>
-                  <span className="text-xl font-bold tracking-tight">PrathamOne Platform</span>
+                  <span className="text-xl font-bold tracking-tight">PrathamOne Eduwork</span>
                 </div>
                 <p className="text-indigo-50/80 text-[13px] leading-relaxed max-w-xs font-medium">
                   The intelligent AI classroom designed for Indian education boards. Empowering Bharat with pedagogical excellence.
@@ -279,7 +279,7 @@ export default function LandingPage() {
             {/* FINAL COPYRIGHT BAR (CRYSTAL CLEAR SUBTLE BAR) */}
             <div className="pt-6 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] font-bold uppercase tracking-[0.25em] text-white/20">
               <div className="flex items-center gap-2">
-                <span>© {new Date().getFullYear()} Prathamone Platform</span>
+                <span>© {new Date().getFullYear()} PrathamOne Eduwork</span>
               </div>
               <div className="flex items-center gap-3">
                 <span className="hidden md:inline">•</span>

@@ -60,7 +60,7 @@ export const metadata: Metadata = {
     title: 'PrathamOne AI Classroom',
     description: 'Transforming education in Bharat with multi-agent AI teachers.',
     url: 'https://prathamone.com',
-    siteName: 'PrathamOne Platform',
+    siteName: 'PrathamOne Eduwork',
     images: [
       {
         url: '/og-image.jpg',
