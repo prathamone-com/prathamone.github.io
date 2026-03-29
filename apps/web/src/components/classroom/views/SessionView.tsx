@@ -15,7 +15,7 @@
 
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ArrowLeft, Mic, Send, Check, Trophy 
@@ -58,7 +58,7 @@ export const SessionView: React.FC<SessionViewProps> = ({
   const t = (key: string) => getTranslation(selectedLanguage, key);
 
   const { 
-    messages, isStreaming, currentTeacherId, startStream, setMessages 
+    messages, isStreaming, currentTeacherId, activePersona, startStream, setMessages 
   } = useClassroomStream();
 
   const [quizQuestions, setQuizQuestions] = useState<any[]>([]);
@@ -76,7 +76,15 @@ export const SessionView: React.FC<SessionViewProps> = ({
     { key: 'summary', label: t('summary') || 'Summary', icon: '🎯' },
   ];
 
-  const currentTeacher = PERSONAS.find(p => p.id === currentTeacherId) || PERSONAS[1];
+  // AI Orchestrator: Selects the best teacher for the current context
+  const autoSelectTeacher = useCallback(() => {
+     if (activeSubject?.toLowerCase().includes('sanskrit')) return 'pandit-ji';
+     if ((selectedGrade || 10) < 6) return 'shanti-maam';
+     if (lessonPhase === 'practice' || lessonPhase === 'remediation') return 'vikram-sir';
+     return 'vikram-sir'; // Default senior lead
+  }, [activeSubject, selectedGrade, lessonPhase]);
+
+  const currentTeacher = activePersona || PERSONAS.find(p => p.id === autoSelectTeacher()) || PERSONAS[1];
 
   // Map phase to functional agent role
   const getFunctionalRole = () => {
@@ -107,12 +115,14 @@ export const SessionView: React.FC<SessionViewProps> = ({
         language: selectedLanguage,
         topic: activeTopic?.title || activeChapter || t('welcome_session') || 'Welcome Session',
         lessonPhase: activeSubject === 'General' ? 'doubt' : lessonPhase,
+        teacherId: autoSelectTeacher(),
         useMock
       });
     };
     
     triggerStream();
-  }, [lessonPhase, activeTopic, activeChapter, activeSubject, selectedLanguage, useMock, startStream]);
+  }, [lessonPhase, activeTopic, activeChapter, activeSubject, selectedLanguage, useMock, startStream, selectedBoard, selectedGrade, autoSelectTeacher, t]);
+
 
   // Handle Practice phase JSON parsing
   useEffect(() => {
@@ -331,37 +341,45 @@ export const SessionView: React.FC<SessionViewProps> = ({
                     />
                   )}
                 </div>
-                <motion.div className="absolute bottom-6 right-6 w-52 h-auto bg-white/90 backdrop-blur-md rounded-2xl shadow-2xl border border-white/50 p-4 flex flex-col items-center">
+                <motion.div 
+                  initial={{ x: 20, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  className="absolute bottom-6 right-6 w-60 h-auto bg-white/80 backdrop-blur-xl rounded-[32px] shadow-2xl border border-white/60 p-5 flex flex-col items-center group transition-all hover:bg-white/95"
+                >
                   {isPushMode && (
                     <motion.div 
                       initial={{ scale: 0 }} animate={{ scale: 1 }}
-                      className="absolute -top-3 -left-3 px-3 py-1 bg-gradient-to-r from-red-600 to-orange-600 text-white text-[9px] font-black uppercase tracking-[0.2em] rounded-full shadow-lg border border-red-400 z-10"
+                      className="absolute -top-3 -left-3 px-4 py-1.5 bg-gradient-to-r from-red-600 to-orange-600 text-white text-[10px] font-black uppercase tracking-[0.2em] rounded-full shadow-lg border border-red-400 z-10"
                     >
                       {t('the_push_mode') || 'THE PUSH MODE'}
                     </motion.div>
                   )}
                   
-                  <div className="w-full aspect-square rounded-xl bg-brand-primary/5 mb-3 overflow-hidden border border-brand-primary/10">
-                    <img src={currentTeacher.avatar} alt={currentTeacher.name} className="w-full h-full object-cover" />
+                  <div className="w-full aspect-square rounded-[24px] bg-brand-primary/5 mb-4 overflow-hidden border border-brand-primary/10 relative">
+                    <img src={currentTeacher.avatar} alt={currentTeacher.name} className="w-full h-full object-cover transition-transform group-hover:scale-110 duration-500" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
                   </div>
                   
                   <div className="text-center w-full">
-                    <p className="font-black text-sm text-gray-900 leading-tight mb-0.5">{currentTeacher.name}</p>
-                    <p className="text-[9px] text-gray-400 font-bold uppercase tracking-widest mb-3">{currentTeacher.role}</p>
+                    <div className="flex flex-col gap-0.5 mb-4">
+                      <p className="font-black text-base text-gray-900 leading-tight">{currentTeacher.name}</p>
+                      <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">{currentTeacher.role}</p>
+                    </div>
                     
-                    <div className="pt-2 border-t border-gray-100 flex flex-col gap-1.5">
-                      <div className="flex items-center justify-center gap-1.5">
-                         <div className="w-1.5 h-1.5 rounded-full bg-brand-success animate-pulse" />
-                         <span className="text-[10px] font-black text-brand-primary uppercase tracking-tighter">
-                            {t('active_agent') || 'Active Agent'}
+                    <div className="pt-4 border-t border-gray-100/50 flex flex-col gap-2">
+                      <div className="flex items-center justify-center gap-2">
+                         <div className="w-2 h-2 rounded-full bg-brand-success animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
+                         <span className="text-[10px] font-black text-brand-primary uppercase tracking-widest opacity-70">
+                            {t('active_agent') || 'Agent Online'}
                          </span>
                       </div>
-                      <span className="text-[11px] font-black text-gray-800 bg-gray-50 py-1.5 rounded-lg border border-gray-100 shadow-inner px-2">
+                      <span className="text-[11px] font-black text-gray-800 bg-gray-50/50 py-2.5 rounded-xl border border-gray-100/50 shadow-sm px-3 backdrop-blur-sm">
                          {t(getFunctionalRole().toLowerCase().replace(/ /g, '_')) || getFunctionalRole()}
                       </span>
                     </div>
                   </div>
                 </motion.div>
+
 
               </div>
             </section>

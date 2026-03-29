@@ -17,6 +17,7 @@ import { useState, useCallback, useRef, useEffect } from 'react';
 import { getOfflineContent } from '../utils/curriculum-offline';
 import { streamText } from 'ai';
 import { google } from '@ai-sdk/google';
+import { PERSONAS } from '@prathamone/ai';
 
 export interface Message {
   id: string;
@@ -33,6 +34,7 @@ export interface StreamParams {
   language: string;
   topic: string;
   lessonPhase: string;
+  teacherId?: string; // Optional: can be auto-selected by view
   useMock: boolean;
 }
 
@@ -40,15 +42,16 @@ export function useClassroomStream() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isStreaming, setIsStreaming] = useState(false);
   const [currentTeacherId, setCurrentTeacherId] = useState<string | null>(null);
+  const [activePersona, setActivePersona] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
   
   const abortControllerRef = useRef<AbortController | null>(null);
   const localStreamIntervalRef = useRef<any>(null);
 
-  const startLocalStream = useCallback((params: StreamParams) => {
+  const startLocalStream = useCallback((params: StreamParams, teacherId: string) => {
     setIsStreaming(true);
     setMessages([]);
-    setCurrentTeacherId('scholar_1');
+    setCurrentTeacherId(teacherId);
 
     const content = getOfflineContent(params.topic, params.lessonPhase, params.language);
     const chars = content.split('');
@@ -70,7 +73,7 @@ export function useClassroomStream() {
       setMessages([{
         id: msgId,
         text: accumulated,
-        teacherId: 'scholar_1',
+        teacherId: teacherId,
         role: 'Teacher',
         isComplete: false
       }]);
@@ -86,14 +89,19 @@ export function useClassroomStream() {
     abortControllerRef.current = new AbortController();
     const signal = abortControllerRef.current.signal;
 
+    // 2. Select Teacher Persona
+    const teacherId = params.teacherId || (params.subject.toLowerCase().includes('sanskrit') ? 'pandit-ji' : (params.grade < 5 ? 'shanti-maam' : 'vikram-sir'));
+    const persona = PERSONAS.find(p => p.id === teacherId) || PERSONAS[1];
+    
     setIsStreaming(true);
     setError(null);
     setMessages([]); 
-    setCurrentTeacherId('scholar_1');
+    setCurrentTeacherId(teacherId);
+    setActivePersona(persona);
 
     // Sovereign (Offline) Trigger or Mock Request
     if (params.useMock || (typeof window !== 'undefined' && !window.navigator.onLine)) {
-      startLocalStream(params);
+      startLocalStream(params, teacherId);
       return;
     }
 
@@ -101,22 +109,27 @@ export function useClassroomStream() {
       // Direct Client-Side AI Streaming (Static-Hosting Compatible)
       const { textStream } = await streamText({
         model: google('gemini-2.0-flash-exp'),
-        system: `You are the "PrathamOne Autonomous Scholar", a premium AI teacher dedicated to students in Bharat.
-        Your tone is supportive, energetic, and pedagogical.
+        system: `You are "${persona.name}", ${persona.role} at PrathamOne.
+        Your Persona: ${persona.description}
+        Your Pedagogy: ${persona.pedagogy}
+        Your Language Proficiencies: ${persona.languages.join(', ')}
+
+        Current Session Context:
         - Board: ${params.board}
         - Grade: ${params.grade}
         - Subject: ${params.subject}
         - Language: ${params.language}
-        - Current Topic: ${params.topic}
-        - Lesson Phase: ${params.lessonPhase} (Concept, Example, Practice, or Summary)
+        - Topic: ${params.topic}
+        - Phase: ${params.lessonPhase} (Concept, Example, Practice, Summary, or Doubt)
 
         Instructions:
-        1. Teach in ${params.language}.
-        2. Use local context and simple analogies.
-        3. If identifying a misconception, heal it with a patient explanation.
-        4. Focus on the ${params.lessonPhase} of the lesson.
-        5. Provide content in professional Markdown.`,
-        prompt: `Continue the lesson on ${params.topic}. We are in the ${params.lessonPhase} phase.`,
+        1. Embody "${persona.name}" fully. Use their teaching style and specific language tone.
+        2. Deliver instruction in ${params.language}.
+        3. Use local context (Bharat) and relatable metaphors.
+        4. Focus clearly on the current ${params.lessonPhase} of the lesson.
+        5. For Practice phase, format your output as valid JSON within a code block if providing questions.
+        6. Keep responses high-energy and pedagogically sound.`,
+        prompt: `Teach ${params.topic}. Phase: ${params.lessonPhase}.`,
         abortSignal: signal,
       });
 
@@ -128,8 +141,8 @@ export function useClassroomStream() {
         setMessages([{
           id: msgId,
           text: fullText,
-          teacherId: 'scholar_1',
-          role: 'Teacher',
+          teacherId: teacherId,
+          role: persona.role,
           isComplete: false
         }]);
       }
@@ -139,7 +152,7 @@ export function useClassroomStream() {
       setError(err.message || 'An unknown error occurred');
       console.error('Stream failure:', err);
       // Fail-over to Local Stream on API error
-      startLocalStream(params);
+      startLocalStream(params, teacherId);
     } finally {
       setIsStreaming(false);
       setMessages(prev => prev.map(m => ({ ...m, isComplete: true })));
@@ -157,11 +170,13 @@ export function useClassroomStream() {
     messages,
     isStreaming,
     currentTeacherId,
+    activePersona,
     error,
     startStream,
     setMessages,
   };
 }
+
 
 
 
