@@ -243,41 +243,41 @@ export default function LandingPage() {
                   </div>
                   <span className="text-xl font-bold tracking-tight">PrathamOne Platform</span>
                 </div>
-                <p className="text-indigo-100/60 text-xs leading-relaxed max-w-xs font-medium">
+                <p className="text-indigo-50/80 text-[13px] leading-relaxed max-w-xs font-medium">
                   The intelligent AI classroom designed for Indian education boards. Empowering Bharat with pedagogical excellence.
                 </p>
               </div>
 
               {/* LINKS SECTION */}
               <div className="flex flex-col gap-4">
-                <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-brand-secondary/80 mb-1">Navigation</h4>
-                <a href="https://aitdl.com" target="_blank" rel="noopener noreferrer" className="text-sm font-semibold hover:text-brand-secondary transition-all">aitdl.com</a>
-                <a href="https://prathamone.com" target="_blank" rel="noopener noreferrer" className="text-sm font-semibold hover:text-brand-secondary transition-all">prathamone.com</a>
+                <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-brand-secondary mb-1">Navigation</h4>
+                <a href="https://aitdl.com" target="_blank" rel="noopener noreferrer" className="text-sm font-semibold text-white hover:text-brand-secondary transition-all">aitdl.com</a>
+                <a href="https://prathamone.com" target="_blank" rel="noopener noreferrer" className="text-sm font-semibold text-white hover:text-brand-secondary transition-all">prathamone.com</a>
               </div>
 
               {/* MISSION SECTION */}
               <div className="flex flex-col gap-4">
-                <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-brand-secondary/80 mb-1">Pedagogy</h4>
-                <div className="flex items-center gap-3 text-sm text-indigo-100/70 font-medium">
+                <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-brand-secondary mb-1">Pedagogy</h4>
+                <div className="flex items-center gap-3 text-sm text-indigo-50/90 font-medium">
                   <div className="w-1.5 h-1.5 bg-brand-secondary rounded-full" />
                   NCERT Aligned Curriculum
                 </div>
-                <div className="flex items-center gap-3 text-sm text-indigo-100/70 font-medium">
-                  <div className="w-1.5 h-1.5 bg-white/20 rounded-full" />
+                <div className="flex items-center gap-3 text-sm text-indigo-50/90 font-medium">
+                  <div className="w-1.5 h-1.5 bg-white/40 rounded-full" />
                   Multi-Agent AI Classroom
                 </div>
               </div>
             </div>
 
-            {/* LEGAL ATTRIBUTION - ZERO FORMAT (SMALLER GAPS / NO LINES) */}
+            {/* LEGAL ATTRIBUTION - ZERO FORMAT (CRYSTAL CLEAR SECONDARY TEXT) */}
             <div className="mb-8 pt-4">
-              <p className="text-[9px] text-white/30 leading-relaxed font-normal tracking-wide italic">
+              <p className="text-[11px] text-white/50 leading-relaxed font-medium tracking-normal">
                 Syllabus artifacts provided under the Open Access Policy of the eBalbharati Bureau, Pune.
               </p>
             </div>
 
-            {/* FINAL COPYRIGHT BAR (NO LINES / TIGHTER) */}
-            <div className="pt-6 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] font-bold uppercase tracking-[0.25em] text-white/10">
+            {/* FINAL COPYRIGHT BAR (CRYSTAL CLEAR SUBTLE BAR) */}
+            <div className="pt-6 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] font-bold uppercase tracking-[0.25em] text-white/20">
               <div className="flex items-center gap-2">
                 <span>© {new Date().getFullYear()} Prathamone Platform</span>
               </div>
